@@ -1,0 +1,40 @@
+.social-button {
+  position: relative;
+  overflow: visible;
+}
+
+.social-button::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: -40px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.facebook-button::before {
+  right: 0;
+}
+
+.whatsapp-button::before {
+  left: 0;
+}
+
+.social-button:hover::before {
+  opacity: 1;
+  visibility: visible;
+  top: -45px;
+}
+
+@media (max-width: 768px) {
+  .social-button::before {
+    display: none;
+  }
+}

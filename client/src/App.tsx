@@ -8,6 +8,7 @@ import Checkout from "@/pages/Checkout";
 import NotFound from "@/pages/not-found";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import SocialButtons from "@/components/layout/SocialButtons";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           </Switch>
         </main>
         <Footer />
+        <SocialButtons />
         <Toaster />
       </div>
     </CartProvider>
