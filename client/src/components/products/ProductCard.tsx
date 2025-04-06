@@ -29,11 +29,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <>
       <Card className="product-card bg-white rounded-lg overflow-hidden shadow-md transform transition duration-300 hover:shadow-xl hover:-translate-y-1 h-full flex flex-col">
-        <div className="h-48 sm:h-56 md:h-64 bg-gray-200 relative overflow-hidden cursor-pointer" onClick={() => setShowDetails(true)}>
+        <div className="h-48 sm:h-56 md:h-64 bg-gray-200 relative overflow-hidden cursor-pointer flex items-center justify-center" onClick={() => setShowDetails(true)}>
           <img 
             src={product.imageUrl} 
             alt={product.name} 
-            className="w-full h-full object-cover"
+            className="w-auto h-full object-contain mx-auto"
             loading="lazy"
           />
         </div>
@@ -75,11 +75,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4">
-            <div className="aspect-video overflow-hidden rounded-md">
+            <div className="aspect-video overflow-hidden rounded-md flex items-center justify-center bg-gray-100">
               <img
                 src={product.imageUrl}
                 alt={product.name}
-                className="w-full h-full object-cover"
+                className="w-auto h-full object-contain mx-auto"
               />
             </div>
             <div>

@@ -8,28 +8,28 @@ async function seedProducts() {
         name: "Pulsera de Corazones",
         description: "Pulsera hecha a mano con cuentas Miyuki en tonos rosas y blancos, con un diseño delicado de corazones.",
         price: "$320",
-        imageUrl: "https://i.imgur.com/bVRyNio.jpg",
+        imageUrl: "/images/pulsera-miyuki.svg",
         category: "pulseras"
       },
       {
         name: "Collar Flor de Loto",
-        description: "Hermoso collar con pendiente de flor de loto, elaborado con cuentas Miyuki en tonos azules y plateados.",
+        description: "Hermoso collar con pendiente de flor de loto, elaborado con cuentas Miyuki en tonos dorados, rojos y verdes.",
         price: "$450",
-        imageUrl: "https://i.imgur.com/vE4rlZ6.jpg",
+        imageUrl: "/images/collar-miyuki.svg",
         category: "collares"
       },
       {
         name: "Aretes de Mariposa",
-        description: "Aretes ligeros en forma de mariposa, hechos con cuentas Miyuki en colores vibrantes que combinan con cualquier atuendo.",
+        description: "Aretes ligeros con diseño geométrico, hechos con cuentas Miyuki en colores vibrantes que combinan con cualquier atuendo.",
         price: "$280",
-        imageUrl: "https://i.imgur.com/MJ51Qcj.jpg",
+        imageUrl: "/images/aretes-miyuki.svg",
         category: "aretes"
       },
       {
         name: "Anillo Ajustable Estrella",
-        description: "Anillo ajustable con diseño de estrella en el centro, elaborado con cuentas Miyuki en tonos dorados.",
+        description: "Anillo ajustable con diseño tablero, elaborado con cuentas Miyuki en tonos dorados y rojos.",
         price: "$220",
-        imageUrl: "https://i.imgur.com/9L81cLM.jpg",
+        imageUrl: "/images/anillo-miyuki.svg",
         category: "anillos"
       }
     ];

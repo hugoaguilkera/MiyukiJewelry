@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+  <!-- Fondo transparente -->
+  <rect width="300" height="300" fill="transparent"/>
+  
+  <!-- Primer arete -->
+  <g id="earring-left" transform="translate(110,0)">
+    <!-- Gancho del arete -->
+    <path d="M60,50 C70,60 70,80 60,90" stroke="silver" stroke-width="1.5" fill="none"/>
+    
+    <!-- Línea vertical -->
+    <line x1="60" y1="90" x2="60" y2="120" stroke="silver" stroke-width="1" />
+    
+    <!-- Cuentas Miyuki -->
+    <g id="miyuki-left">
+      <!-- Fila superior: rojo, turquesa, azul -->
+      <rect x="50" y="120" width="8" height="8" fill="#d32f2f" stroke="#333" stroke-width="0.3"/>
+      <rect x="58" y="120" width="8" height="8" fill="#00bcd4" stroke="#333" stroke-width="0.3"/>
+      <rect x="66" y="120" width="8" height="8" fill="#1976d2" stroke="#333" stroke-width="0.3"/>
+      
+      <!-- Fila media: dorado -->
+      <rect x="50" y="128" width="8" height="8" fill="gold" stroke="#333" stroke-width="0.3"/>
+      <rect x="58" y="128" width="8" height="8" fill="gold" stroke="#333" stroke-width="0.3"/>
+      <rect x="66" y="128" width="8" height="8" fill="gold" stroke="#333" stroke-width="0.3"/>
+      
+      <!-- Fila inferior: rojo, turquesa, azul -->
+      <rect x="50" y="136" width="8" height="8" fill="#d32f2f" stroke="#333" stroke-width="0.3"/>
+      <rect x="58" y="136" width="8" height="8" fill="#00bcd4" stroke="#333" stroke-width="0.3"/>
+      <rect x="66" y="136" width="8" height="8" fill="#1976d2" stroke="#333" stroke-width="0.3"/>
+    </g>
+  </g>
+  
+  <!-- Segundo arete -->
+  <g id="earring-right" transform="translate(170,0)">
+    <!-- Gancho del arete -->
+    <path d="M60,50 C70,60 70,80 60,90" stroke="silver" stroke-width="1.5" fill="none"/>
+    
+    <!-- Línea vertical -->
+    <line x1="60" y1="90" x2="60" y2="120" stroke="silver" stroke-width="1" />
+    
+    <!-- Cuentas Miyuki -->
+    <g id="miyuki-right">
+      <!-- Fila superior: rojo, turquesa, azul -->
+      <rect x="50" y="120" width="8" height="8" fill="#d32f2f" stroke="#333" stroke-width="0.3"/>
+      <rect x="58" y="120" width="8" height="8" fill="#00bcd4" stroke="#333" stroke-width="0.3"/>
+      <rect x="66" y="120" width="8" height="8" fill="#1976d2" stroke="#333" stroke-width="0.3"/>
+      
+      <!-- Fila media: dorado -->
+      <rect x="50" y="128" width="8" height="8" fill="gold" stroke="#333" stroke-width="0.3"/>
+      <rect x="58" y="128" width="8" height="8" fill="gold" stroke="#333" stroke-width="0.3"/>
+      <rect x="66" y="128" width="8" height="8" fill="gold" stroke="#333" stroke-width="0.3"/>
+      
+      <!-- Fila inferior: rojo, turquesa, azul -->
+      <rect x="50" y="136" width="8" height="8" fill="#d32f2f" stroke="#333" stroke-width="0.3"/>
+      <rect x="58" y="136" width="8" height="8" fill="#00bcd4" stroke="#333" stroke-width="0.3"/>
+      <rect x="66" y="136" width="8" height="8" fill="#1976d2" stroke="#333" stroke-width="0.3"/>
+    </g>
+  </g>
+</svg>
