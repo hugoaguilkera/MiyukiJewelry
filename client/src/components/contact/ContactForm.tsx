@@ -171,8 +171,8 @@ const ContactForm = () => {
                     <div className="ml-3 sm:ml-4">
                       <p className="font-medium text-sm sm:text-base">Dirección</p>
                       <p className="text-white/80 text-xs sm:text-sm">
-                        Calle Artesanal 123, Col. Centro<br />
-                        Ciudad de México, México
+                        Fuentes 211, Col. Villas de Anahuac<br />
+                        Sector Alpes 1, Escobedo NL, C.P. 66059
                       </p>
                     </div>
                   </div>
@@ -181,7 +181,7 @@ const ContactForm = () => {
                     <Mail className="flex-shrink-0 mt-1 text-white/80 h-4 w-4 sm:h-5 sm:w-5" />
                     <div className="ml-3 sm:ml-4">
                       <p className="font-medium text-sm sm:text-base">Correo electrónico</p>
-                      <p className="text-white/80 text-xs sm:text-sm">info@miyuki.com</p>
+                      <p className="text-white/80 text-xs sm:text-sm">mbecerra@hotmail.com</p>
                     </div>
                   </div>
                   
@@ -189,7 +189,7 @@ const ContactForm = () => {
                     <Phone className="flex-shrink-0 mt-1 text-white/80 h-4 w-4 sm:h-5 sm:w-5" />
                     <div className="ml-3 sm:ml-4">
                       <p className="font-medium text-sm sm:text-base">Teléfono</p>
-                      <p className="text-white/80 text-xs sm:text-sm">+52 55 1234 5678</p>
+                      <p className="text-white/80 text-xs sm:text-sm">+52 8184995581</p>
                     </div>
                   </div>
                   
