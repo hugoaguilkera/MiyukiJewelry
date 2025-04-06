@@ -6,9 +6,9 @@ async function seedProducts() {
     const sampleProducts = [
       {
         name: "Pulsera de Corazones",
-        description: "Pulsera hecha a mano con cuentas Miyuki en tonos rosas y blancos, con un diseño delicado de corazones.",
+        description: "Pulsera hecha a mano con cuentas Miyuki en tonos rojos y dorados, con un diseño delicado de corazones.",
         price: "$320",
-        imageUrl: "/images/attached_assets/image_1743974675256.png",
+        imageUrl: "/images/pulsera-corazones.png",
         category: "pulseras"
       },
       {
