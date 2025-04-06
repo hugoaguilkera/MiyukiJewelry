@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,15 +11,6 @@ const ProductGallery = () => {
 
   const { data: products = [], isLoading, error } = useQuery<Product[]>({
     queryKey: ["/api/products"],
-    queryFn: async ({ queryKey }) => {
-      const res = await fetch(queryKey[0] as string, {
-        credentials: "include",
-      });
-      if (!res.ok) {
-        throw new Error(`Error fetching products: ${res.statusText}`);
-      }
-      return res.json() as Promise<Product[]>;
-    }
   });
 
   const categories: { value: ProductCategory; label: string }[] = [
