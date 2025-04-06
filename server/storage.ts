@@ -36,131 +36,114 @@ export interface IStorage {
   getAllContactMessages(): Promise<ContactMessage[]>;
 }
 
-// In-memory storage implementation
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private products: Map<number, Product>;
-  private testimonials: Map<number, Testimonial>;
-  private contactMessages: Map<number, ContactMessage>;
-  
-  private currentUserId: number;
-  private currentProductId: number;
-  private currentTestimonialId: number;
-  private currentContactMessageId: number;
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
-  constructor() {
-    this.users = new Map();
-    this.products = new Map();
-    this.testimonials = new Map();
-    this.contactMessages = new Map();
-    
-    this.currentUserId = 1;
-    this.currentProductId = 1;
-    this.currentTestimonialId = 1;
-    this.currentContactMessageId = 1;
-    
-    // Initialize with sample testimonials
-    this.initTestimonials();
-  }
-
-  // User methods (from original code)
+// Database storage implementation
+export class DatabaseStorage implements IStorage {
+  // User methods
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const [user] = await db.insert(users).values(insertUser).returning();
     return user;
   }
   
   // Product methods
   async getAllProducts(): Promise<Product[]> {
-    return Array.from(this.products.values());
+    return await db.select().from(products);
   }
   
   async getProductById(id: number): Promise<Product | undefined> {
-    return this.products.get(id);
+    const [product] = await db.select().from(products).where(eq(products.id, id));
+    return product || undefined;
   }
   
   async getProductsByCategory(category: string): Promise<Product[]> {
-    return Array.from(this.products.values()).filter(
-      product => product.category === category
-    );
+    return await db.select().from(products).where(eq(products.category, category));
   }
   
   async createProduct(insertProduct: InsertProduct): Promise<Product> {
-    const id = this.currentProductId++;
-    const product: Product = { ...insertProduct, id };
-    this.products.set(id, product);
+    const [product] = await db.insert(products).values(insertProduct).returning();
     return product;
   }
   
   async deleteProduct(id: number): Promise<boolean> {
-    return this.products.delete(id);
+    const result = await db.delete(products).where(eq(products.id, id)).returning();
+    return result.length > 0;
   }
   
   // Testimonial methods
   async getAllTestimonials(): Promise<Testimonial[]> {
-    return Array.from(this.testimonials.values());
+    return await db.select().from(testimonials);
   }
   
   async createTestimonial(insertTestimonial: InsertTestimonial): Promise<Testimonial> {
-    const id = this.currentTestimonialId++;
-    const testimonial: Testimonial = { ...insertTestimonial, id };
-    this.testimonials.set(id, testimonial);
+    const [testimonial] = await db.insert(testimonials).values(insertTestimonial).returning();
     return testimonial;
   }
   
   // Contact message methods
   async createContactMessage(insertMessage: InsertContactMessage): Promise<ContactMessage> {
-    const id = this.currentContactMessageId++;
-    const message: ContactMessage = { ...insertMessage, id };
-    this.contactMessages.set(id, message);
+    const [message] = await db.insert(contactMessages).values(insertMessage).returning();
     return message;
   }
   
   async getAllContactMessages(): Promise<ContactMessage[]> {
-    return Array.from(this.contactMessages.values());
+    return await db.select().from(contactMessages);
   }
   
-  // Initialize sample testimonials
-  private initTestimonials() {
-    const testimonials: InsertTestimonial[] = [
-      {
-        name: "Laura Martínez",
-        content: "Las piezas de Miyuki son increíblemente hermosas y únicas. Recibí muchos cumplidos por mi collar y siempre recomiendo esta tienda. La calidad es excepcional.",
-        rating: 5,
-        customerSince: "2021",
-        imageUrl: "https://randomuser.me/api/portraits/women/62.jpg"
-      },
-      {
-        name: "Carlos Rodríguez",
-        content: "Compré una pulsera como regalo para mi hija y quedó encantada. El servicio fue excelente y el empaque muy elegante. Definitivamente volveré a comprar.",
-        rating: 5,
-        customerSince: "2022",
-        imageUrl: "https://randomuser.me/api/portraits/men/41.jpg"
-      },
-      {
-        name: "Ana García",
-        content: "La atención personalizada que me brindaron fue excepcional. Las piezas son tan delicadas y hermosas como se ven en las fotos. Me encanta que cada pieza sea única.",
-        rating: 4,
-        customerSince: "2020",
-        imageUrl: "https://randomuser.me/api/portraits/women/33.jpg"
-      }
-    ];
+  // Initialize sample testimonials if none exist
+  async initializeTestimonials(): Promise<void> {
+    const existingTestimonials = await db.select().from(testimonials);
     
-    testimonials.forEach(testimonial => {
-      this.createTestimonial(testimonial);
-    });
+    if (existingTestimonials.length === 0) {
+      const sampleTestimonials: InsertTestimonial[] = [
+        {
+          name: "Laura Martínez",
+          content: "Las piezas de Miyuki son increíblemente hermosas y únicas. Recibí muchos cumplidos por mi collar y siempre recomiendo esta tienda. La calidad es excepcional.",
+          rating: 5,
+          customerSince: "2021",
+          imageUrl: "https://randomuser.me/api/portraits/women/62.jpg"
+        },
+        {
+          name: "Carlos Rodríguez",
+          content: "Compré una pulsera como regalo para mi hija y quedó encantada. El servicio fue excelente y el empaque muy elegante. Definitivamente volveré a comprar.",
+          rating: 5,
+          customerSince: "2022",
+          imageUrl: "https://randomuser.me/api/portraits/men/41.jpg"
+        },
+        {
+          name: "Ana García",
+          content: "La atención personalizada que me brindaron fue excepcional. Las piezas son tan delicadas y hermosas como se ven en las fotos. Me encanta que cada pieza sea única.",
+          rating: 4,
+          customerSince: "2020",
+          imageUrl: "https://randomuser.me/api/portraits/women/33.jpg"
+        }
+      ];
+      
+      await db.insert(testimonials).values(sampleTestimonials);
+    }
   }
 }
 
-export const storage = new MemStorage();
+// Create and initialize database storage
+export const storage = new DatabaseStorage();
+
+// Initialize testimonials data (run this at startup)
+(async () => {
+  try {
+    await (storage as DatabaseStorage).initializeTestimonials();
+    console.log("Database initialized with sample testimonials (if needed)");
+  } catch (error) {
+    console.error("Error initializing database:", error);
+  }
+})();
