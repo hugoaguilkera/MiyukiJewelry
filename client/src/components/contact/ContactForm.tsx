@@ -64,28 +64,28 @@ const ContactForm = () => {
           </p>
         </div>
         
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="md:flex">
-              <div className="md:w-1/2 p-8">
-                <h3 className="text-2xl font-display font-bold mb-4">Envíanos un mensaje</h3>
+            <div className="flex flex-col md:flex-row">
+              <div className="w-full md:w-1/2 p-4 sm:p-6 md:p-8">
+                <h3 className="text-xl sm:text-2xl font-display font-bold mb-4">Envíanos un mensaje</h3>
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 sm:space-y-4">
                     <FormField
                       control={form.control}
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-medium text-gray-700">
+                          <FormLabel className="text-xs sm:text-sm font-medium text-gray-700">
                             Nombre completo
                           </FormLabel>
                           <FormControl>
                             <Input 
                               {...field} 
-                              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" 
+                              className="w-full px-3 sm:px-4 py-1.5 sm:py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" 
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-xs" />
                         </FormItem>
                       )}
                     />
@@ -95,17 +95,17 @@ const ContactForm = () => {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-medium text-gray-700">
+                          <FormLabel className="text-xs sm:text-sm font-medium text-gray-700">
                             Correo electrónico
                           </FormLabel>
                           <FormControl>
                             <Input 
                               {...field} 
                               type="email" 
-                              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" 
+                              className="w-full px-3 sm:px-4 py-1.5 sm:py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" 
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-xs" />
                         </FormItem>
                       )}
                     />
@@ -115,16 +115,16 @@ const ContactForm = () => {
                       name="subject"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-medium text-gray-700">
+                          <FormLabel className="text-xs sm:text-sm font-medium text-gray-700">
                             Asunto
                           </FormLabel>
                           <FormControl>
                             <Input 
                               {...field} 
-                              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" 
+                              className="w-full px-3 sm:px-4 py-1.5 sm:py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" 
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-xs" />
                         </FormItem>
                       )}
                     />
@@ -134,17 +134,17 @@ const ContactForm = () => {
                       name="message"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-sm font-medium text-gray-700">
+                          <FormLabel className="text-xs sm:text-sm font-medium text-gray-700">
                             Mensaje
                           </FormLabel>
                           <FormControl>
                             <Textarea 
                               {...field} 
-                              rows={4} 
-                              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" 
+                              rows={3}
+                              className="w-full px-3 sm:px-4 py-1.5 sm:py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" 
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage className="text-xs" />
                         </FormItem>
                       )}
                     />
@@ -152,10 +152,10 @@ const ContactForm = () => {
                     <Button 
                       type="submit" 
                       disabled={contactMutation.isPending}
-                      className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 h-auto"
+                      className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 sm:py-3 px-4 sm:px-6 h-auto text-xs sm:text-sm"
                     >
                       {contactMutation.isPending && (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <Loader2 className="mr-2 h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
                       )}
                       Enviar mensaje
                     </Button>
@@ -163,14 +163,14 @@ const ContactForm = () => {
                 </Form>
               </div>
               
-              <div className="md:w-1/2 bg-primary text-white p-8">
-                <h3 className="text-2xl font-display font-bold mb-6">Información de contacto</h3>
-                <div className="space-y-4">
+              <div className="w-full md:w-1/2 bg-primary text-white p-4 sm:p-6 md:p-8">
+                <h3 className="text-xl sm:text-2xl font-display font-bold mb-4 sm:mb-6">Información de contacto</h3>
+                <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-start">
-                    <MapPin className="flex-shrink-0 mt-1 text-white/80" />
-                    <div className="ml-4">
-                      <p className="font-medium">Dirección</p>
-                      <p className="text-white/80">
+                    <MapPin className="flex-shrink-0 mt-1 text-white/80 h-4 w-4 sm:h-5 sm:w-5" />
+                    <div className="ml-3 sm:ml-4">
+                      <p className="font-medium text-sm sm:text-base">Dirección</p>
+                      <p className="text-white/80 text-xs sm:text-sm">
                         Calle Artesanal 123, Col. Centro<br />
                         Ciudad de México, México
                       </p>
@@ -178,26 +178,26 @@ const ContactForm = () => {
                   </div>
                   
                   <div className="flex items-start">
-                    <Mail className="flex-shrink-0 mt-1 text-white/80" />
-                    <div className="ml-4">
-                      <p className="font-medium">Correo electrónico</p>
-                      <p className="text-white/80">info@miyuki.com</p>
+                    <Mail className="flex-shrink-0 mt-1 text-white/80 h-4 w-4 sm:h-5 sm:w-5" />
+                    <div className="ml-3 sm:ml-4">
+                      <p className="font-medium text-sm sm:text-base">Correo electrónico</p>
+                      <p className="text-white/80 text-xs sm:text-sm">info@miyuki.com</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start">
-                    <Phone className="flex-shrink-0 mt-1 text-white/80" />
-                    <div className="ml-4">
-                      <p className="font-medium">Teléfono</p>
-                      <p className="text-white/80">+52 55 1234 5678</p>
+                    <Phone className="flex-shrink-0 mt-1 text-white/80 h-4 w-4 sm:h-5 sm:w-5" />
+                    <div className="ml-3 sm:ml-4">
+                      <p className="font-medium text-sm sm:text-base">Teléfono</p>
+                      <p className="text-white/80 text-xs sm:text-sm">+52 55 1234 5678</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start">
-                    <Clock className="flex-shrink-0 mt-1 text-white/80" />
-                    <div className="ml-4">
-                      <p className="font-medium">Horario de atención</p>
-                      <p className="text-white/80">
+                    <Clock className="flex-shrink-0 mt-1 text-white/80 h-4 w-4 sm:h-5 sm:w-5" />
+                    <div className="ml-3 sm:ml-4">
+                      <p className="font-medium text-sm sm:text-base">Horario de atención</p>
+                      <p className="text-white/80 text-xs sm:text-sm">
                         Lunes a Viernes: 10:00 AM - 7:00 PM<br />
                         Sábado: 10:00 AM - 3:00 PM
                       </p>
@@ -205,20 +205,20 @@ const ContactForm = () => {
                   </div>
                 </div>
                 
-                <div className="mt-8">
-                  <h4 className="font-medium mb-3">Síguenos</h4>
-                  <div className="flex space-x-4">
+                <div className="mt-6 sm:mt-8">
+                  <h4 className="font-medium mb-2 sm:mb-3 text-sm sm:text-base">Síguenos</h4>
+                  <div className="flex space-x-3 sm:space-x-4">
                     <a href="#" className="text-white hover:text-white/80 transition duration-300">
-                      <FacebookIcon size={20} />
+                      <FacebookIcon size={16} className="sm:w-5 sm:h-5" />
                     </a>
                     <a href="#" className="text-white hover:text-white/80 transition duration-300">
-                      <InstagramIcon size={20} />
+                      <InstagramIcon size={16} className="sm:w-5 sm:h-5" />
                     </a>
                     <a href="#" className="text-white hover:text-white/80 transition duration-300">
-                      <FaPinterest size={20} />
+                      <FaPinterest size={16} className="sm:w-5 sm:h-5" />
                     </a>
                     <a href="#" className="text-white hover:text-white/80 transition duration-300">
-                      <FaTiktok size={20} />
+                      <FaTiktok size={16} className="sm:w-5 sm:h-5" />
                     </a>
                   </div>
                 </div>
