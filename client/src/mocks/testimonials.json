@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Laura Martínez",
+    "content": "Las piezas de Miyuki son increíblemente hermosas y únicas. Recibí muchos cumplidos por mi collar y siempre recomiendo esta tienda. La calidad es excepcional.",
+    "rating": 5,
+    "customerSince": "2021",
+    "imageUrl": "https://randomuser.me/api/portraits/women/62.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Carlos Rodríguez",
+    "content": "Compré una pulsera como regalo para mi hija y quedó encantada. El servicio fue excelente y el empaque muy elegante. Definitivamente volveré a comprar.",
+    "rating": 5,
+    "customerSince": "2022",
+    "imageUrl": "https://randomuser.me/api/portraits/men/41.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Ana García",
+    "content": "La atención personalizada que me brindaron fue excepcional. Las piezas son tan delicadas y hermosas como se ven en las fotos. Me encanta que cada pieza sea única.",
+    "rating": 4,
+    "customerSince": "2020",
+    "imageUrl": "https://randomuser.me/api/portraits/women/33.jpg"
+  }
+]

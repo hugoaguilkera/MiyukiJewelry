@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "Collar de Flor Azul",
+    "price": "280.00",
+    "category": "collares",
+    "description": "Hermoso collar con diseño de flor en tonos azules, hecho a mano con cuentas Miyuki de alta calidad.",
+    "imageUrl": "/images/collar_flor_azul.svg"
+  },
+  {
+    "id": 2,
+    "name": "Pulsera de Arcoíris",
+    "price": "150.00",
+    "category": "pulseras",
+    "description": "Pulsera colorida con patrón de arcoíris, perfecta para el verano y combinar con múltiples atuendos.",
+    "imageUrl": "/images/pulsera_arcoiris.svg"
+  },
+  {
+    "id": 3,
+    "name": "Aretes de Luna",
+    "price": "180.00",
+    "category": "aretes",
+    "description": "Elegantes aretes con forma de luna creciente en tonos plateados y cristales, ideales para ocasiones especiales.",
+    "imageUrl": "/images/aretes_luna.svg"
+  },
+  {
+    "id": 4,
+    "name": "Anillo de Flores",
+    "price": "120.00",
+    "category": "anillos",
+    "description": "Delicado anillo con patrón de flores pequeñas, ajustable y muy cómodo de usar diariamente.",
+    "imageUrl": "/images/anillo_flores.svg"
+  },
+  {
+    "id": 5,
+    "name": "Collar de Corazón",
+    "price": "300.00",
+    "category": "collares",
+    "description": "Romántico collar con dije de corazón elaborado con minuciosas cuentas en tonos rojos y rosas.",
+    "imageUrl": "/images/collar_corazon.svg"
+  },
+  {
+    "id": 13,
+    "name": "Pulsera de Corazones",
+    "price": "185.00",
+    "category": "pulseras",
+    "description": "Hermosa pulsera con patrón de corazones, elaborada con cuentas Miyuki en tonos cálidos.",
+    "imageUrl": "/images/pulsera_corazones.png"
+  }
+]

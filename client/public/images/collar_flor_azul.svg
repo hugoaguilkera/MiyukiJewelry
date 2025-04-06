@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cadena del collar -->
+  <path d="M30,100 Q100,60 170,100" stroke="#C0C0C0" stroke-width="3" fill="none" />
+  
+  <!-- Flor central -->
+  <g transform="translate(100,100)">
+    <!-- Pétalos de la flor -->
+    <ellipse cx="0" cy="-20" rx="12" ry="20" fill="#1E90FF" transform="rotate(0)" />
+    <ellipse cx="0" cy="-20" rx="12" ry="20" fill="#4169E1" transform="rotate(45)" />
+    <ellipse cx="0" cy="-20" rx="12" ry="20" fill="#1E90FF" transform="rotate(90)" />
+    <ellipse cx="0" cy="-20" rx="12" ry="20" fill="#4169E1" transform="rotate(135)" />
+    <ellipse cx="0" cy="-20" rx="12" ry="20" fill="#1E90FF" transform="rotate(180)" />
+    <ellipse cx="0" cy="-20" rx="12" ry="20" fill="#4169E1" transform="rotate(225)" />
+    <ellipse cx="0" cy="-20" rx="12" ry="20" fill="#1E90FF" transform="rotate(270)" />
+    <ellipse cx="0" cy="-20" rx="12" ry="20" fill="#4169E1" transform="rotate(315)" />
+    
+    <!-- Centro de la flor -->
+    <circle cx="0" cy="0" r="10" fill="#FFD700" />
+    <circle cx="0" cy="0" r="5" fill="#FFA500" />
+  </g>
+  
+  <!-- Detalles adicionales -->
+  <circle cx="80" cy="95" r="3" fill="#1E90FF" />
+  <circle cx="120" cy="95" r="3" fill="#1E90FF" />
+  <circle cx="60" cy="90" r="2" fill="#4169E1" />
+  <circle cx="140" cy="90" r="2" fill="#4169E1" />
+</svg>
