@@ -10,7 +10,8 @@ import {
   SheetTitle,
   SheetTrigger,
   SheetFooter,
-  SheetClose
+  SheetClose,
+  SheetDescription
 } from '@/components/ui/sheet';
 
 const Cart = () => {
@@ -37,12 +38,13 @@ const Cart = () => {
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button
-          variant="outline"
-          size="icon"
-          className="relative"
+          variant="secondary"
+          size="sm"
+          className="relative flex items-center gap-1.5"
           aria-label="Abrir carrito"
         >
-          <ShoppingCart className="h-5 w-5" />
+          <ShoppingCart className="h-4 w-4" />
+          <span className="hidden sm:inline">Carrito</span>
           {totalItems > 0 && (
             <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
               {totalItems}
@@ -57,6 +59,9 @@ const Cart = () => {
             <ShoppingCart className="h-5 w-5" />
             Carrito de Compras
           </SheetTitle>
+          <SheetDescription>
+            Revisa los productos en tu carrito
+          </SheetDescription>
         </SheetHeader>
         
         <div className="flex-1 overflow-auto py-4">

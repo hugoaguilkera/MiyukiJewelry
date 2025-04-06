@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Product } from '@shared/schema';
+import type { Product } from '@/lib/types';
 
 // Tipo para los items del carrito
 export interface CartItem {
@@ -135,4 +135,5 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-export default CartContext;
+// Exportar por defecto el contexto
+// export default CartContext;

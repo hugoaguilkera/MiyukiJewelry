@@ -52,8 +52,10 @@ const Header = () => {
             })}
           </nav>
           
-          {/* Cart component */}
-          <Cart />
+          {/* Cart component - más visible */}
+          <div className="relative z-50">
+            <Cart />
+          </div>
           
           {/* Mobile menu button */}
           <button 
@@ -84,6 +86,10 @@ const Header = () => {
                 {link.label}
               </Link>
             ))}
+            <div className="py-2 flex items-center">
+              <span className="text-foreground font-medium mr-2">Carrito:</span>
+              <Cart />
+            </div>
           </nav>
         </div>
       )}
