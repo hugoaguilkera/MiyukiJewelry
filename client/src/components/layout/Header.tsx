@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Menu, X } from 'lucide-react';
+import Cart from '@/components/cart/Cart';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -30,38 +31,43 @@ const Header = () => {
           <h1 className="text-2xl md:text-3xl font-display font-bold text-primary">Miyuki</h1>
         </Link>
         
-        {/* Mobile menu button */}
-        <button 
-          className="md:hidden text-foreground focus:outline-none" 
-          onClick={toggleMobileMenu}
-          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-        >
-          {mobileMenuOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
-        </button>
-        
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-8">
-          {navLinks.map((link) => {
-            const isActive = location === link.href || 
-                            (link.href.startsWith('/#') && location === '/');
-            
-            return (
-              <Link 
-                key={link.href} 
-                href={link.href}
-                className={`text-foreground hover:text-primary transition duration-300 font-medium ${
-                  isActive ? "text-primary" : ""
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
+        <div className="flex items-center space-x-4">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex space-x-8">
+            {navLinks.map((link) => {
+              const isActive = location === link.href || 
+                              (link.href.startsWith('/#') && location === '/');
+              
+              return (
+                <Link 
+                  key={link.href} 
+                  href={link.href}
+                  className={`text-foreground hover:text-primary transition duration-300 font-medium ${
+                    isActive ? "text-primary" : ""
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+          
+          {/* Cart component */}
+          <Cart />
+          
+          {/* Mobile menu button */}
+          <button 
+            className="md:hidden text-foreground focus:outline-none" 
+            onClick={toggleMobileMenu}
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          >
+            {mobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button>
+        </div>
       </div>
       
       {/* Mobile Navigation */}
