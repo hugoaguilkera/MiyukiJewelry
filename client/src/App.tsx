@@ -9,6 +9,7 @@ import NotFound from "@/pages/not-found";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import SocialButtons from "@/components/layout/SocialButtons";
+import ChatBox from "@/components/chat/ChatBox";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         </main>
         <Footer />
         <SocialButtons />
+        <ChatBox />
         <Toaster />
       </div>
     </CartProvider>
