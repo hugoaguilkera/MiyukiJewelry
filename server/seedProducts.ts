@@ -8,7 +8,7 @@ async function seedProducts() {
         name: "Pulsera de Corazones",
         description: "Pulsera hecha a mano con cuentas Miyuki en tonos rosas y blancos, con un diseño delicado de corazones.",
         price: "$320",
-        imageUrl: "/images/pulsera-miyuki.svg",
+        imageUrl: "/images/attached_assets/image_1743974675256.png",
         category: "pulseras"
       },
       {
