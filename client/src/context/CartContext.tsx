@@ -1,139 +1,138 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import type { Product } from '@/lib/types';
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { Product } from "../types";
+import { useToast } from "@/hooks/use-toast";
 
-// Tipo para los items del carrito
-export interface CartItem {
+interface CartItem {
   product: Product;
   quantity: number;
 }
 
-// Tipo para el contexto del carrito
 interface CartContextType {
-  cartItems: CartItem[];
+  items: CartItem[];
   addToCart: (product: Product) => void;
   removeFromCart: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => void;
   clearCart: () => void;
+  isCartOpen: boolean;
+  openCart: () => void;
+  closeCart: () => void;
   totalItems: number;
-  totalPrice: string;
+  totalPrice: number;
 }
 
-// Valor por defecto para el contexto
-const defaultCartContext: CartContextType = {
-  cartItems: [],
-  addToCart: () => {},
-  removeFromCart: () => {},
-  updateQuantity: () => {},
-  clearCart: () => {},
-  totalItems: 0,
-  totalPrice: '$0',
-};
+const CartContext = createContext<CartContextType | undefined>(undefined);
 
-// Crear el contexto
-const CartContext = createContext<CartContextType>(defaultCartContext);
+export function CartProvider({ children }: { children: ReactNode }) {
+  const [items, setItems] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { toast } = useToast();
 
-// Hook personalizado para usar el contexto
-export const useCart = () => useContext(CartContext);
-
-// Proveedor del contexto
-export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // Estado para los items del carrito
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  
-  // Cargar el carrito desde localStorage cuando el componente se monta
+  // Load cart from localStorage on initial render
   useEffect(() => {
-    const savedCart = localStorage.getItem('miyukiCart');
+    const savedCart = localStorage.getItem("miyuki-cart");
     if (savedCart) {
       try {
-        setCartItems(JSON.parse(savedCart));
+        setItems(JSON.parse(savedCart));
       } catch (error) {
-        console.error('Error al cargar el carrito desde localStorage:', error);
+        console.error("Error parsing saved cart:", error);
       }
     }
   }, []);
-  
-  // Guardar el carrito en localStorage cuando cambia
-  useEffect(() => {
-    localStorage.setItem('miyukiCart', JSON.stringify(cartItems));
-  }, [cartItems]);
 
-  // Función para agregar un producto al carrito
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("miyuki-cart", JSON.stringify(items));
+  }, [items]);
+
+  // Calculate total items
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+
+  // Calculate total price
+  const totalPrice = items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+
+  // Add product to cart
   const addToCart = (product: Product) => {
-    setCartItems(prev => {
-      // Buscar si el producto ya está en el carrito
-      const existingItemIndex = prev.findIndex(item => item.product.id === product.id);
+    setItems(prevItems => {
+      // Check if product is already in cart
+      const existingItem = prevItems.find(item => item.product.id === product.id);
       
-      if (existingItemIndex !== -1) {
-        // Si el producto ya está en el carrito, incrementar la cantidad
-        const updatedItems = [...prev];
-        updatedItems[existingItemIndex] = {
-          ...updatedItems[existingItemIndex],
-          quantity: updatedItems[existingItemIndex].quantity + 1
-        };
-        return updatedItems;
+      if (existingItem) {
+        // Increment quantity if product already exists
+        return prevItems.map(item => 
+          item.product.id === product.id 
+            ? { ...item, quantity: item.quantity + 1 } 
+            : item
+        );
       } else {
-        // Si el producto no está en el carrito, agregarlo con cantidad 1
-        return [...prev, { product, quantity: 1 }];
+        // Add new product with quantity 1
+        return [...prevItems, { product, quantity: 1 }];
       }
+    });
+    
+    toast({
+      title: "Producto agregado",
+      description: `${product.name} ha sido agregado al carrito.`,
     });
   };
 
-  // Función para eliminar un producto del carrito
+  // Remove product from cart
   const removeFromCart = (productId: number) => {
-    setCartItems(prev => prev.filter(item => item.product.id !== productId));
+    setItems(prevItems => prevItems.filter(item => item.product.id !== productId));
   };
 
-  // Función para actualizar la cantidad de un producto en el carrito
+  // Update product quantity
   const updateQuantity = (productId: number, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(productId);
       return;
     }
     
-    setCartItems(prev => 
-      prev.map(item => 
-        item.product.id === productId ? { ...item, quantity } : item
+    setItems(prevItems => 
+      prevItems.map(item => 
+        item.product.id === productId 
+          ? { ...item, quantity } 
+          : item
       )
     );
   };
 
-  // Función para vaciar el carrito
+  // Clear cart
   const clearCart = () => {
-    setCartItems([]);
+    setItems([]);
   };
 
-  // Calcular el número total de items en el carrito
-  const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
-
-  // Calcular el precio total
-  const calculateTotalPrice = (): string => {
-    const totalNumeric = cartItems.reduce((total, item) => {
-      // Extraer el valor numérico eliminando el símbolo de moneda
-      const priceValue = parseFloat(item.product.price.replace(/[^0-9.-]+/g, ""));
-      return total + (priceValue * item.quantity);
-    }, 0);
-    
-    return `$${totalNumeric.toFixed(0)}`;
+  // Open cart
+  const openCart = () => {
+    setIsCartOpen(true);
   };
 
-  const totalPrice = calculateTotalPrice();
+  // Close cart
+  const closeCart = () => {
+    setIsCartOpen(false);
+  };
 
   return (
-    <CartContext.Provider
-      value={{
-        cartItems,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-        clearCart,
-        totalItems,
-        totalPrice
-      }}
-    >
+    <CartContext.Provider value={{
+      items,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      clearCart,
+      isCartOpen,
+      openCart,
+      closeCart,
+      totalItems,
+      totalPrice
+    }}>
       {children}
     </CartContext.Provider>
   );
-};
+}
 
-// Exportar por defecto el contexto
-// export default CartContext;
+export function useCart() {
+  const context = useContext(CartContext);
+  if (context === undefined) {
+    throw new Error("useCart must be used within a CartProvider");
+  }
+  return context;
+}

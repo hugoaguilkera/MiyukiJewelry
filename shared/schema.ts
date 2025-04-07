@@ -1,99 +1,96 @@
-import { pgTable, text, serial, integer, boolean, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, real, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-// User schema (keeping as per original)
+// Users table (keeping the existing one)
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
 });
 
-// Product schema for jewelry items
+export const insertUserSchema = createInsertSchema(users).pick({
+  username: true,
+  password: true,
+});
+
+// Categories table
+export const categories = pgTable("categories", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  imageUrl: text("image_url"),
+});
+
+export const insertCategorySchema = createInsertSchema(categories).pick({
+  name: true,
+  slug: true,
+  imageUrl: true,
+});
+
+// Products table
 export const products = pgTable("products", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
-  price: text("price").notNull(),
-  category: text("category").notNull(),
-  description: text("description").notNull(),
-  imageUrl: text("image_url").notNull(),
+  price: real("price").notNull(),
+  description: text("description"),
+  imageUrl: text("image_url"),
+  categoryId: integer("category_id").notNull(),
+  rating: real("rating").default(0),
+  reviewCount: integer("review_count").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-// Testimonial schema
+export const insertProductSchema = createInsertSchema(products).omit({
+  id: true,
+  createdAt: true,
+  rating: true,
+  reviewCount: true,
+});
+
+// Testimonials table
 export const testimonials = pgTable("testimonials", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  content: text("content").notNull(),
+  customerName: text("customer_name").notNull(),
+  customerImage: text("customer_image"),
+  comment: text("comment").notNull(),
   rating: integer("rating").notNull(),
-  customerSince: text("customer_since").notNull(),
-  imageUrl: text("image_url").notNull(),
+  customerSince: text("customer_since"),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-// Contact message schema
+export const insertTestimonialSchema = createInsertSchema(testimonials).omit({
+  id: true,
+  createdAt: true,
+});
+
+// Contact messages table
 export const contactMessages = pgTable("contact_messages", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull(),
   subject: text("subject").notNull(),
   message: text("message").notNull(),
-  createdAt: text("created_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-// Insert schemas
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
-});
-
-export const insertProductSchema = createInsertSchema(products).pick({
-  name: true,
-  price: true,
-  category: true,
-  description: true,
-  imageUrl: true,
-});
-
-export const insertTestimonialSchema = createInsertSchema(testimonials).pick({
-  name: true,
-  content: true,
-  rating: true,
-  customerSince: true,
-  imageUrl: true,
-});
-
-export const insertContactMessageSchema = createInsertSchema(contactMessages).pick({
-  name: true,
-  email: true,
-  subject: true,
-  message: true,
+export const insertContactMessageSchema = createInsertSchema(contactMessages).omit({
+  id: true,
   createdAt: true,
 });
 
-// Types for each schema
-export type InsertUser = z.infer<typeof insertUserSchema>;
+// Types for our schema
 export type User = typeof users.$inferSelect;
+export type InsertUser = z.infer<typeof insertUserSchema>;
 
-export type InsertProduct = z.infer<typeof insertProductSchema>;
+export type Category = typeof categories.$inferSelect;
+export type InsertCategory = z.infer<typeof insertCategorySchema>;
+
 export type Product = typeof products.$inferSelect;
+export type InsertProduct = z.infer<typeof insertProductSchema>;
 
-export type InsertTestimonial = z.infer<typeof insertTestimonialSchema>;
 export type Testimonial = typeof testimonials.$inferSelect;
+export type InsertTestimonial = z.infer<typeof insertTestimonialSchema>;
 
-export type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;
 export type ContactMessage = typeof contactMessages.$inferSelect;
-
-// Form validation schemas
-export const contactFormSchema = z.object({
-  name: z.string().min(2, { message: "El nombre es requerido" }),
-  email: z.string().email({ message: "Correo electrónico inválido" }),
-  subject: z.string().min(3, { message: "El asunto es requerido" }),
-  message: z.string().min(10, { message: "El mensaje debe tener al menos 10 caracteres" }),
-});
-
-export const productFormSchema = z.object({
-  name: z.string().min(3, { message: "El nombre del producto es requerido" }),
-  price: z.string().min(1, { message: "El precio es requerido" }),
-  category: z.string().min(1, { message: "La categoría es requerida" }),
-  description: z.string().min(10, { message: "La descripción debe tener al menos 10 caracteres" }),
-  imageUrl: z.string().min(1, { message: "La imagen es requerida" }),
-});
+export type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;
