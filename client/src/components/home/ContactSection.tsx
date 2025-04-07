@@ -69,7 +69,8 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-medium">Ubicación</h4>
-                  <p>Av. Principal 123, Ciudad de México</p>
+                  <p>Fuentes 211, Villas de Anáhuac, Sector Alpes</p>
+                  <p>C.P. 66059</p>
                 </div>
               </div>
               
@@ -79,7 +80,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-medium">Teléfono</h4>
-                  <p>+52 55 1234 5678</p>
+                  <p>+52 8184995581</p>
                 </div>
               </div>
               
@@ -114,7 +115,7 @@ const ContactSection = () => {
                 <i className="fab fa-instagram"></i>
               </a>
               <a 
-                href="https://wa.me/5212345678" 
+                href="https://wa.me/528184995581" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-[#D4AF37] flex items-center justify-center text-white hover:bg-opacity-90 transition-opacity" 

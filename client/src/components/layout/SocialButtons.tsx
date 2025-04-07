@@ -2,7 +2,7 @@ const SocialButtons = () => {
   return (
     <div className="fixed bottom-6 right-6 z-40 flex flex-col space-y-3">
       <a 
-        href="https://wa.me/5212345678" 
+        href="https://wa.me/528184995581" 
         target="_blank" 
         rel="noopener noreferrer"
         className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform" 
