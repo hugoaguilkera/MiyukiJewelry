@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+  <!-- Fondo transparente -->
+  <rect width="300" height="300" fill="transparent"/>
+  
+  <!-- Pulsera base - forma ovalada -->
+  <ellipse cx="150" cy="150" rx="80" ry="50" fill="none" stroke="silver" stroke-width="2" stroke-dasharray="5,3"/>
+  
+  <!-- Cuentas Miyuki alrededor de la pulsera -->
+  <g id="miyuki-beads">
+    <!-- Primer grupo - parte superior de la pulsera -->
+    <g transform="translate(125, 95)">
+      <!-- Fila 1 - rosa, blanco, rosa -->
+      <rect x="0" y="0" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+      <rect x="10" y="0" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      <rect x="20" y="0" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+      <rect x="30" y="0" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      
+      <!-- Fila 2 - blanco, rosa, blanco -->
+      <rect x="0" y="10" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      <rect x="10" y="10" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+      <rect x="20" y="10" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      <rect x="30" y="10" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+    </g>
+    
+    <!-- Segundo grupo - parte inferior de la pulsera -->
+    <g transform="translate(125, 195)">
+      <!-- Fila 1 - rosa, blanco, rosa -->
+      <rect x="0" y="0" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+      <rect x="10" y="0" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      <rect x="20" y="0" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+      <rect x="30" y="0" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      
+      <!-- Fila 2 - blanco, rosa, blanco -->
+      <rect x="0" y="10" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      <rect x="10" y="10" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+      <rect x="20" y="10" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      <rect x="30" y="10" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+    </g>
+    
+    <!-- Tercer grupo - lado izquierdo de la pulsera -->
+    <g transform="translate(70, 145)">
+      <!-- Diseño de corazón con cuadrados -->
+      <rect x="0" y="0" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+      <rect x="10" y="0" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+      <rect x="0" y="10" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+      <rect x="10" y="10" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+      
+      <rect x="20" y="0" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      <rect x="30" y="0" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      <rect x="20" y="10" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      <rect x="30" y="10" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+    </g>
+    
+    <!-- Cuarto grupo - lado derecho de la pulsera -->
+    <g transform="translate(190, 145)">
+      <!-- Diseño de corazón con cuadrados -->
+      <rect x="0" y="0" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      <rect x="10" y="0" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      <rect x="0" y="10" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      <rect x="10" y="10" width="10" height="10" fill="white" stroke="#333" stroke-width="0.3"/>
+      
+      <rect x="20" y="0" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+      <rect x="30" y="0" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+      <rect x="20" y="10" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+      <rect x="30" y="10" width="10" height="10" fill="#e91e63" stroke="#333" stroke-width="0.3"/>
+    </g>
+  </g>
+  
+  <!-- Pequeños detalles dorados -->
+  <circle cx="125" cy="150" r="2" fill="gold"/>
+  <circle cx="175" cy="150" r="2" fill="gold"/>
+  <circle cx="150" cy="100" r="2" fill="gold"/>
+  <circle cx="150" cy="200" r="2" fill="gold"/>
+</svg>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+  <!-- Fondo transparente -->
+  <rect width="300" height="300" fill="transparent"/>
+  
+  <!-- Cadena del collar -->
+  <path d="M75,100 C125,160 175,160 225,100" stroke="goldenrod" stroke-width="2" fill="none"/>
+  
+  <!-- Cuentas Miyuki en la parte central -->
+  <g id="miyuki-beads">
+    <!-- Rojo -->
+    <rect x="127" y="148" width="10" height="10" fill="#d32f2f" stroke="#333" stroke-width="0.5"/>
+    <rect x="138" y="148" width="10" height="10" fill="#d32f2f" stroke="#333" stroke-width="0.5"/>
+    <rect x="149" y="148" width="10" height="10" fill="#d32f2f" stroke="#333" stroke-width="0.5"/>
+    <rect x="160" y="148" width="10" height="10" fill="#d32f2f" stroke="#333" stroke-width="0.5"/>
+    
+    <!-- Dorado -->
+    <rect x="127" y="159" width="10" height="10" fill="gold" stroke="#333" stroke-width="0.5"/>
+    <rect x="138" y="159" width="10" height="10" fill="gold" stroke="#333" stroke-width="0.5"/>
+    <rect x="149" y="159" width="10" height="10" fill="gold" stroke="#333" stroke-width="0.5"/>
+    <rect x="160" y="159" width="10" height="10" fill="gold" stroke="#333" stroke-width="0.5"/>
+    
+    <!-- Verde -->
+    <rect x="127" y="170" width="10" height="10" fill="#388e3c" stroke="#333" stroke-width="0.5"/>
+    <rect x="138" y="170" width="10" height="10" fill="#388e3c" stroke="#333" stroke-width="0.5"/>
+    <rect x="149" y="170" width="10" height="10" fill="#388e3c" stroke="#333" stroke-width="0.5"/>
+    <rect x="160" y="170" width="10" height="10" fill="#388e3c" stroke="#333" stroke-width="0.5"/>
+  </g>
+  
+  <!-- Colgante central -->
+  <g id="pendant">
+    <path d="M150,180 L140,200 L160,200 Z" fill="gold" stroke="#333" stroke-width="1"/>
+    <circle cx="150" cy="195" r="3" fill="#d32f2f"/>
+  </g>
+  
+  <!-- Cuentas pequeñas a lo largo de la cadena -->
+  <circle cx="90" cy="115" r="2" fill="gold"/>
+  <circle cx="105" cy="130" r="2" fill="gold"/>
+  <circle cx="120" cy="140" r="2" fill="gold"/>
+  <circle cx="180" cy="140" r="2" fill="gold"/>
+  <circle cx="195" cy="130" r="2" fill="gold"/>
+  <circle cx="210" cy="115" r="2" fill="gold"/>
+</svg>
