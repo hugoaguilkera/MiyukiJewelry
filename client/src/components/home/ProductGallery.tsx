@@ -9,100 +9,99 @@ const ProductGallery = () => {
   const [displayProducts, setDisplayProducts] = useState<Product[]>([]);
   const [visibleProducts, setVisibleProducts] = useState<number>(8);
 
-  // Fetch products
   const { data: products, isLoading, error } = useQuery<Product[]>({
-    queryKey: ['/api/products'],
+    queryKey: ["/api/products"],
   });
 
-  // Update displayed products when products, filters, or sort changes
   useEffect(() => {
-    if (!products) return;
+    if (!products || !Array.isArray(products)) {
+      setDisplayProducts([]);
+      return;
+    }
 
     let filtered = [...products];
-    
-    // Apply category filter
-    if (categoryFilter) {
-      filtered = filtered.filter(product => product.categoryId === categoryFilter);
+
+    // Filtro por categoría
+    if (categoryFilter !== null) {
+      filtered = filtered.filter(
+        (product) => product.categoryId === categoryFilter
+      );
     }
-    
-    // Apply sorting
+
+    // Ordenamiento seguro
     switch (sortOption) {
       case "price-asc":
-        filtered.sort((a, b) => a.price - b.price);
+        filtered.sort(
+          (a, b) => (a.price ?? 0) - (b.price ?? 0)
+        );
         break;
+
       case "price-desc":
-        filtered.sort((a, b) => b.price - a.price);
+        filtered.sort(
+          (a, b) => (b.price ?? 0) - (a.price ?? 0)
+        );
         break;
+
       case "newest":
-        filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        filtered.sort(
+          (a, b) =>
+            new Date(b.createdAt ?? 0).getTime() -
+            new Date(a.createdAt ?? 0).getTime()
+        );
         break;
+
       case "featured":
       default:
-        // Sort by rating and then review count for featured
         filtered.sort((a, b) => {
-          if (b.rating !== a.rating) return b.rating - a.rating;
-          return b.reviewCount - a.reviewCount;
+          const ratingDiff = (b.rating ?? 0) - (a.rating ?? 0);
+          if (ratingDiff !== 0) return ratingDiff;
+          return (b.reviewCount ?? 0) - (a.reviewCount ?? 0);
         });
         break;
     }
-    
+
     setDisplayProducts(filtered);
   }, [products, categoryFilter, sortOption]);
 
-  // Handle category change
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleCategoryChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     const value = e.target.value;
     setCategoryFilter(value === "all" ? null : parseInt(value));
   };
 
-  // Handle sort change
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSortChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setSortOption(e.target.value);
   };
 
-  // Load more products
   const loadMoreProducts = () => {
-    setVisibleProducts(prev => prev + 4);
+    setVisibleProducts((prev) => prev + 4);
   };
 
   if (isLoading) {
     return (
-      <section id="productos" className="py-16 bg-[#F8F8F8]">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-12">
-            <div>
-              <h2 className="font-display text-3xl md:text-4xl font-bold mb-3">Nuestros Productos</h2>
-              <p className="text-[#333333] text-opacity-70">Cargando productos...</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, index) => (
-              <div key={index} className="bg-white rounded-lg overflow-hidden shadow-md animate-pulse">
-                <div className="h-64 bg-gray-300"></div>
-                <div className="p-4">
-                  <div className="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
-                  <div className="flex justify-between items-center">
-                    <div className="h-4 bg-gray-300 rounded w-1/4"></div>
-                    <div className="h-4 bg-gray-300 rounded w-1/3"></div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      <section className="py-16 text-center">
+        <p>Cargando productos...</p>
       </section>
     );
   }
 
   if (error) {
     return (
-      <section id="productos" className="py-16 bg-[#F8F8F8]">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
-            <h2 className="font-display text-3xl md:text-4xl font-bold mb-3">Nuestros Productos</h2>
-            <p className="text-red-500">Error al cargar los productos. Por favor, intenta de nuevo más tarde.</p>
-          </div>
-        </div>
+      <section className="py-16 text-center">
+        <p className="text-red-500">
+          Error al cargar los productos.
+        </p>
+      </section>
+    );
+  }
+
+  if (!displayProducts.length) {
+    return (
+      <section className="py-16 text-center">
+        <p>No hay productos disponibles.</p>
       </section>
     );
   }
@@ -112,51 +111,59 @@ const ProductGallery = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center mb-12">
           <div>
-            <h2 className="font-display text-3xl md:text-4xl font-bold mb-3">Nuestros Productos</h2>
-            <p className="text-[#333333] text-opacity-70 max-w-xl">
-              Descubre nuestra colección de piezas únicas hechas a mano.
-            </p>
+            <h2 className="text-3xl font-bold mb-3">
+              Nuestros Productos
+            </h2>
           </div>
-          <div className="mt-4 md:mt-0">
-            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-              <select 
-                className="border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent"
-                onChange={handleCategoryChange}
-                value={categoryFilter === null ? "all" : categoryFilter.toString()}
-              >
-                <option value="all">Todos los productos</option>
-                <option value="1">Pulseras</option>
-                <option value="2">Collares</option>
-                <option value="3">Aretes</option>
-                <option value="4">Anillos</option>
-              </select>
-              <select 
-                className="border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent"
-                onChange={handleSortChange}
-                value={sortOption}
-              >
-                <option value="featured">Ordenar por: Destacados</option>
-                <option value="price-asc">Precio: Menor a mayor</option>
-                <option value="price-desc">Precio: Mayor a menor</option>
-                <option value="newest">Más recientes</option>
-              </select>
-            </div>
+
+          <div className="flex space-x-2 mt-4 md:mt-0">
+            <select
+              onChange={handleCategoryChange}
+              value={
+                categoryFilter === null
+                  ? "all"
+                  : categoryFilter.toString()
+              }
+              className="border rounded px-3 py-2"
+            >
+              <option value="all">Todos</option>
+              <option value="1">Pulseras</option>
+              <option value="2">Collares</option>
+              <option value="3">Aretes</option>
+              <option value="4">Anillos</option>
+            </select>
+
+            <select
+              onChange={handleSortChange}
+              value={sortOption}
+              className="border rounded px-3 py-2"
+            >
+              <option value="featured">Destacados</option>
+              <option value="price-asc">Precio ↑</option>
+              <option value="price-desc">Precio ↓</option>
+              <option value="newest">Más recientes</option>
+            </select>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {displayProducts.slice(0, visibleProducts).map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {displayProducts
+            .slice(0, visibleProducts)
+            .map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+              />
+            ))}
         </div>
 
         {visibleProducts < displayProducts.length && (
-          <div className="mt-12 flex justify-center">
-            <button 
+          <div className="mt-10 text-center">
+            <button
               onClick={loadMoreProducts}
-              className="bg-white border border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white font-medium py-3 px-8 rounded-md transition-colors"
+              className="border px-6 py-3 rounded"
             >
-              Cargar más productos
+              Cargar más
             </button>
           </div>
         )}
