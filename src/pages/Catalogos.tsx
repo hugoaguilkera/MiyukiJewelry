@@ -2,23 +2,19 @@ export default function Catalogos() {
   const categorias = [
     {
       nombre: "Collares",
-      descripcion: "Elegancia artesanal para cada ocasión.",
-      imagen: "https://images.unsplash.com/photo-1605106702845-8c5e43f1b2c6"
+      descripcion: "Elegancia artesanal para cada ocasión."
     },
     {
       nombre: "Pulseras",
-      descripcion: "Diseños delicados hechos a mano.",
-      imagen: "https://images.unsplash.com/photo-1585386959984-a4155224a1ad"
+      descripcion: "Diseños delicados hechos a mano."
     },
     {
       nombre: "Aretes",
-      descripcion: "Detalles que iluminan tu estilo.",
-      imagen: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f"
+      descripcion: "Detalles que iluminan tu estilo."
     },
     {
       nombre: "Anillos",
-      descripcion: "Piezas únicas con personalidad.",
-      imagen: "https://images.unsplash.com/photo-1617038220319-276d3cfab638"
+      descripcion: "Piezas únicas con personalidad."
     }
   ];
 
@@ -44,13 +40,11 @@ export default function Catalogos() {
               key={cat.nombre}
               className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition duration-500"
             >
-              {/* Imagen */}
-              <div className="h-64 overflow-hidden">
-                <img
-                  src={cat.imagen}
-                  alt={cat.nombre}
-                  className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
-                />
+              {/* Placeholder visual premium */}
+              <div className="h-64 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                <span className="text-gray-400 text-lg tracking-wider uppercase">
+                  {cat.nombre}
+                </span>
               </div>
 
               {/* Contenido */}
