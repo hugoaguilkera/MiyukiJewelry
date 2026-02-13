@@ -422,4 +422,4 @@ export class MemStorage implements IStorage {
 }
 
 // Use MemStorage for development or when DATABASE_URL is not available
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
