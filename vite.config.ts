@@ -20,7 +20,7 @@ export default defineConfig({
   },
 
   build: {
-    outDir: path.resolve(__dirname, "dist/public"),
+    outDir: "dist", // 🔥 IMPORTANTE: ya no dist/public
     emptyOutDir: true,
   },
 });
