@@ -1,0 +1,8 @@
+echo {^
+  "buildCommand": "npm run build",^
+  "outputDirectory": "dist/public",^
+  "framework": "vite",^
+  "routes": [^
+    { "src": "/(.*)", "dest": "/" }^
+  ]^
+} > vercel.json
