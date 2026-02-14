@@ -1,9 +1,11 @@
 export const config = {
   runtime: "nodejs18.x",
+  regions: ["iad1"],
 };
 
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { neon } from '@neondatabase/serverless';
+import { dir } from 'console';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
