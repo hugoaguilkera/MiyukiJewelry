@@ -1,17 +1,22 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
-import { db } from '../server/db';
-import { products } from '../shared/schema';
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ message: 'Method not allowed' });
+export default function handler(
+  req: VercelRequest,
+  res: VercelResponse
+) {
+  if (req.method !== "GET") {
+    return res.status(405).json({ message: "Method not allowed" });
   }
 
-  try {
-    const data = await db.select().from(products);
-    return res.status(200).json(data);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: 'Error obteniendo productos' });
-  }
+  res.status(200).json([
+    {
+      id: 1,
+      name: "Pulsera minimalista",
+      price: "$450",
+      imageUrl:
+        "https://res.cloudinary.com/dnv4hrn3y/image/upload/v1771013713/pulsera_dorada_con_corazones-removebg-preview-Photoroom3_LE_auto_x4_light_ai_bdtfm7.png",
+      category: "pulseras",
+      description: "Pulsera dorada con corazones."
+    }
+  ]);
 }
