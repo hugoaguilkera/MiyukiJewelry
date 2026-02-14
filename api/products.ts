@@ -1,5 +1,21 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
+import { neon } from "@neondatabase/serverless";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  return res.status(200).json({ ok: true })
+const sql = neon(process.env.DATABASE_URL!);
+
+export default async function handler(
+  req: VercelRequest,
+  res: VercelResponse
+) {
+  try {
+    const products = await sql`
+      SELECT * FROM products
+      ORDER BY id DESC
+    `;
+
+    return res.status(200).json(products);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "DB error", detail: error });
+  }
 }
