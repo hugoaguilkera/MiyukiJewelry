@@ -5,7 +5,8 @@
   "functions": {
     "api/**/*.ts": {
       "runtime": "nodejs18.x",
-      "maxDuration": 10
+      "maxDuration": 15,
+      "regions": ["iad1"]
     }
   }
 }
