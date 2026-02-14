@@ -8,21 +8,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const data = await db.select().from(products);
+    const data = await db
+      .select({
+        id: products.id,
+        name: products.name,
+        price: products.price,
+        description: products.description,
+        imageUrl: products.imageUrl,
+        categoryId: products.categoryId,
+      })
+      .from(products)
+      .limit(50);
 
-    // Transformamos nombre -> name para que el frontend funcione
-    const formatted = data.map((p) => ({
-      id: p.id,
-      name: p.nombre,
-      price: p.price,
-      imageUrl: p.imageUrl,
-      category: p.category,
-      description: p.description,
-    }));
-
-    return res.status(200).json(formatted);
+    return res.status(200).json(data);
   } catch (error) {
-    console.error(error);
+    console.error('Products API error:', error);
     return res.status(500).json({ message: 'Error obteniendo productos' });
   }
 }
