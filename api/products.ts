@@ -14,16 +14,19 @@ export default async function handler(
         name,
         description,
         price,
-        image_url as "imageUrl",
-        category_id as "categoryId",
-        created_at as "createdAt"
+        image_url AS "imageUrl",
+        category_id AS "categoryId",
+        created_at AS "createdAt"
       FROM products
       ORDER BY id DESC
     `;
 
     return res.status(200).json(products);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "DB error" });
+    console.error("DB ERROR:", error);
+    return res.status(500).json({
+      error: "DB error",
+      detail: String(error),
+    });
   }
 }
