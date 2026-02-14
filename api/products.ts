@@ -23,10 +23,7 @@ export default async function handler(
 
     return res.status(200).json(products);
   } catch (error) {
-    console.error("DB ERROR:", error);
-    return res.status(500).json({
-      error: "DB error",
-      detail: String(error),
-    });
+    console.error(error);
+    return res.status(500).json({ error: "DB error" });
   }
 }
