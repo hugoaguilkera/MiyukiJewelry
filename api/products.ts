@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { db } from "../lib/db.js";
+import { db } from "../lib/db";
 import { products } from "../shared/schema";
 
 export default async function handler(
@@ -32,4 +32,5 @@ export default async function handler(
     });
   }
 }
+
 
