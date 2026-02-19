@@ -3,13 +3,23 @@ import { useQuery } from "@tanstack/react-query";
 export default function Catalogos() {
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['/api/products'],
+    queryKey: ['products'],
+    queryFn: async () => {
+      const res = await fetch("/api/products");
+      const json = await res.json();
+      return json.result; // regresamos SOLO el array
+    }
   });
 
-  if (isLoading) return <p className="p-10">Cargando productos...</p>;
-  if (error) return <p className="p-10">Error cargando productos</p>;
+  if (isLoading) {
+    return <p className="p-10 text-center">Cargando productos...</p>;
+  }
 
-  const products = data?.result || [];
+  if (error) {
+    return <p className="p-10 text-center">Error cargando productos</p>;
+  }
+
+  const products = data || [];
 
   return (
     <div className="p-10 grid grid-cols-1 md:grid-cols-3 gap-6">
