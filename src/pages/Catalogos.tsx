@@ -1,46 +1,35 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Catalogos() {
 
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['products'],
+    queryFn: async () => {
+      const res = await fetch("/api/products");
+      const json = await res.json();
+      return json.result; // SOLO regresamos el array
+    }
+  });
 
-  useEffect(() => {
-    fetch("/api/products")
-      .then(res => res.json())
-      .then(data => {
-        console.log("API RESPONSE:", data);
-        setProducts(data.result || []);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("ERROR:", err);
-        setLoading(false);
-      });
-  }, []);
+  if (isLoading) return <p className="p-10 text-center">Cargando productos...</p>;
+  if (error) return <p className="p-10 text-center">Error cargando productos</p>;
 
-  if (loading) {
-    return (
-      <div className="p-20 text-center">
-        <h2>Cargando productos...</h2>
-      </div>
-    );
-  }
+  const products = data || [];
 
   return (
     <section className="bg-[#f6f2ea] min-h-screen py-20 px-6">
       <div className="max-w-7xl mx-auto">
 
-        <h1 className="text-4xl font-light text-center mb-6">
+        <h1 className="text-4xl font-light text-center mb-10">
           Catálogos Miyuki
         </h1>
 
-        <p className="text-center mb-10">
+        <p className="text-center mb-6">
           Total productos: {products.length}
         </p>
 
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((product) => (
+          {products.map((product: any) => (
             <div
               key={product.id}
               className="bg-white rounded-2xl overflow-hidden shadow-sm"
