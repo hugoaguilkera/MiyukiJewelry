@@ -1,37 +1,44 @@
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 export default function Catalogos() {
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['products'],
-    queryFn: async () => {
-      const res = await fetch("/api/products");
-      const json = await res.json();
-      return json.result; // regresamos SOLO el array
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        const res = await fetch("/api/products");
+        const data = await res.json();
+        setProducts(data.result || []);
+      } catch (err) {
+        console.error("Error:", err);
+      } finally {
+        setLoading(false);
+      }
     }
-  });
 
-  if (isLoading) {
-    return <p className="p-10 text-center">Cargando productos...</p>;
+    loadProducts();
+  }, []);
+
+  if (loading) {
+    return <p style={{padding:"40px"}}>Cargando productos...</p>;
   }
-
-  if (error) {
-    return <p className="p-10 text-center">Error cargando productos</p>;
-  }
-
-  const products = data || [];
 
   return (
-    <div className="p-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-      {products.map((product: any) => (
-        <div key={product.id} className="border rounded-lg p-4 shadow">
+    <div style={{padding:"40px"}}>
+      <h2>Catálogos Miyuki</h2>
+      <p>Total productos: {products.length}</p>
+
+      {products.map((product) => (
+        <div key={product.id} style={{marginBottom:"20px"}}>
           <img
             src={product.image_url}
             alt={product.name}
-            className="w-full h-60 object-cover rounded"
+            width="200"
           />
-          <h3 className="mt-3 font-bold text-lg">{product.name}</h3>
-          <p className="text-gray-600">${product.price}</p>
+          <h3>{product.name}</h3>
+          <p>${product.price}</p>
         </div>
       ))}
     </div>
