@@ -27,7 +27,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { toast } = useToast();
 
-  // Load cart from localStorage on initial render
+  // 🔄 Cargar carrito desde localStorage
   useEffect(() => {
     const savedCart = localStorage.getItem("miyuki-cart");
     if (savedCart) {
@@ -39,91 +39,94 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Save cart to localStorage whenever it changes
+  // 💾 Guardar carrito en localStorage
   useEffect(() => {
     localStorage.setItem("miyuki-cart", JSON.stringify(items));
   }, [items]);
 
-  // Calculate total items
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  // 🧮 Total de productos
+  const totalItems = items.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
 
-  // Calculate total price
-  const totalPrice = items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+  // 💰 Total precio (FORZAMOS Number)
+  const totalPrice = items.reduce(
+    (sum, item) => sum + (Number(item.product.price) * item.quantity),
+    0
+  );
 
-  // Add product to cart
+  // ➕ Agregar al carrito
   const addToCart = (product: Product) => {
     setItems(prevItems => {
-      // Check if product is already in cart
-      const existingItem = prevItems.find(item => item.product.id === product.id);
-      
+      const existingItem = prevItems.find(
+        item => item.product.id === product.id
+      );
+
       if (existingItem) {
-        // Increment quantity if product already exists
-        return prevItems.map(item => 
-          item.product.id === product.id 
-            ? { ...item, quantity: item.quantity + 1 } 
+        return prevItems.map(item =>
+          item.product.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
             : item
         );
-      } else {
-        // Add new product with quantity 1
-        return [...prevItems, { product, quantity: 1 }];
       }
+
+      return [...prevItems, { product, quantity: 1 }];
     });
-    
+
     toast({
       title: "Producto agregado",
       description: `${product.name} ha sido agregado al carrito.`,
     });
   };
 
-  // Remove product from cart
+  // ➖ Remover producto
   const removeFromCart = (productId: number) => {
-    setItems(prevItems => prevItems.filter(item => item.product.id !== productId));
+    setItems(prevItems =>
+      prevItems.filter(item => item.product.id !== productId)
+    );
   };
 
-  // Update product quantity
+  // 🔢 Actualizar cantidad
   const updateQuantity = (productId: number, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(productId);
       return;
     }
-    
-    setItems(prevItems => 
-      prevItems.map(item => 
-        item.product.id === productId 
-          ? { ...item, quantity } 
+
+    setItems(prevItems =>
+      prevItems.map(item =>
+        item.product.id === productId
+          ? { ...item, quantity }
           : item
       )
     );
   };
 
-  // Clear cart
+  // 🧹 Limpiar carrito
   const clearCart = () => {
     setItems([]);
   };
 
-  // Open cart
-  const openCart = () => {
-    setIsCartOpen(true);
-  };
-
-  // Close cart
-  const closeCart = () => {
-    setIsCartOpen(false);
-  };
+  // 🛒 Control visual
+  const openCart = () => setIsCartOpen(true);
+  const closeCart = () => setIsCartOpen(false);
 
   return (
-    <CartContext.Provider value={{
-      items,
-      addToCart,
-      removeFromCart,
-      updateQuantity,
-      clearCart,
-      isCartOpen,
-      openCart,
-      closeCart,
-      totalItems,
-      totalPrice
-    }}>
+    <CartContext.Provider
+      value={{
+        items,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        isCartOpen,
+        openCart,
+        closeCart,
+        totalItems,
+        totalPrice
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
@@ -131,8 +134,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
 export function useCart() {
   const context = useContext(CartContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useCart must be used within a CartProvider");
   }
   return context;
 }
+
