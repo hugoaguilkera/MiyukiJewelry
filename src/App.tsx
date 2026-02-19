@@ -1,6 +1,6 @@
 import { Switch, Route } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "./components/ui/toaster";
 import { queryClient } from "./lib/queryClient";
 import { CartProvider } from "./context/CartContext";
 
@@ -13,6 +13,8 @@ import Catalogos from "./pages/Catalogos";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import SocialButtons from "./components/layout/SocialButtons";
+
+import CartDrawer from "./components/CartDrawer";
 
 function Router() {
   return (
@@ -38,6 +40,10 @@ function App() {
           <Footer />
           <SocialButtons />
         </div>
+
+        {/* Drawer global del carrito */}
+        <CartDrawer />
+
         <Toaster />
       </CartProvider>
     </QueryClientProvider>
@@ -45,3 +51,4 @@ function App() {
 }
 
 export default App;
+
