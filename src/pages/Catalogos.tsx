@@ -10,7 +10,7 @@ export default function Catalogos() {
       try {
         const res = await fetch("/api/products");
         const data = await res.json();
-        setProducts(data); // ← AQUÍ está el cambio
+        setProducts(data.result || []); // ← ESTA es la correcta
       } catch (err) {
         console.error("Error:", err);
       } finally {
@@ -44,5 +44,4 @@ export default function Catalogos() {
     </div>
   );
 }
-
 
