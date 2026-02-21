@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams, useLocation } from "wouter";
 
 /* =========================
    TYPES
@@ -13,80 +14,67 @@ interface Product {
   name: string;
   price: number;
   image_url: string;
-  categoryId?: number;
 }
 
 /* =========================
    COMPONENT
 ========================= */
 export default function Catalogos() {
+  const params = useParams<{ categoryId?: string }>();
+  const [, setLocation] = useLocation();
 
-  /* =========================
-     STATE
-  ========================= */
+  const categoryId = params?.categoryId
+    ? Number(params.categoryId)
+    : null;
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
   /* =========================
-     INIT
+     LOAD CATEGORIES
   ========================= */
   useEffect(() => {
-    fetchCategories();
+    fetch("/api/categories")
+      .then(res => res.json())
+      .then(data => setCategories(data))
+      .catch(err => console.error(err));
   }, []);
 
   /* =========================
-     DATA FUNCTIONS
+     LOAD PRODUCTS BY URL
   ========================= */
-  const fetchCategories = async () => {
-    const res = await fetch("/api/categories");
-    const data = await res.json();
-    setCategories(data);
-  };
+  useEffect(() => {
+    if (!categoryId) return;
 
-  const fetchProductsByCategory = async (categoryId: number) => {
-    const res = await fetch(`/api/products?categoryId=${categoryId}`);
-    const data = await res.json();
-    setProducts(data.result || data);
-    setSelectedCategory(categoryId);
-  };
-
-  const goBackToCategories = () => {
-    setSelectedCategory(null);
-    setProducts([]);
-  };
+    fetch(`/api/products?categoryId=${categoryId}`)
+      .then(res => res.json())
+      .then(data => {
+        setProducts(data.result || data);
+      })
+      .catch(err => console.error(err));
+  }, [categoryId]);
 
   /* =========================
      RENDER
   ========================= */
   return (
     <div style={containerStyle}>
-
       <h1 style={titleStyle}>Catálogos Miyuki</h1>
 
       {/* =========================
          CATEGORY VIEW
       ========================= */}
-      {!selectedCategory && (
+      {!categoryId && (
         <div style={gridCategoriesStyle}>
           {categories.map((cat) => (
             <div
               key={cat.id}
-              onClick={() => fetchProductsByCategory(cat.id)}
+              onClick={() => setLocation(`/catalogos/${cat.id}`)}
               style={categoryCardStyle}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-6px)";
-                e.currentTarget.style.boxShadow = "0 12px 30px rgba(0,0,0,0.12)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 6px 18px rgba(0,0,0,0.08)";
-              }}
             >
               <div style={categoryImageStyle}>
                 <span style={{ color: "#aaa" }}>Miyuki</span>
               </div>
-
               <h3 style={categoryTitleStyle}>{cat.name}</h3>
             </div>
           ))}
@@ -96,27 +84,18 @@ export default function Catalogos() {
       {/* =========================
          PRODUCTS VIEW
       ========================= */}
-      {selectedCategory && (
+      {categoryId && (
         <div>
-
-          <button onClick={goBackToCategories} style={backButtonStyle}>
+          <button
+            onClick={() => setLocation("/catalogos")}
+            style={backButtonStyle}
+          >
             ← Volver
           </button>
 
           <div style={gridProductsStyle}>
             {products.map((product) => (
-              <div
-                key={product.id}
-                style={productCardStyle}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-6px)";
-                  e.currentTarget.style.boxShadow = "0 12px 30px rgba(0,0,0,0.12)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 6px 18px rgba(0,0,0,0.08)";
-                }}
-              >
+              <div key={product.id} style={productCardStyle}>
                 <img
                   src={product.image_url}
                   alt={product.name}
@@ -127,10 +106,8 @@ export default function Catalogos() {
               </div>
             ))}
           </div>
-
         </div>
       )}
-
     </div>
   );
 }
@@ -164,8 +141,7 @@ const categoryCardStyle = {
   borderRadius: "20px",
   boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
   textAlign: "center" as const,
-  cursor: "pointer",
-  transition: "all 0.3s ease"
+  cursor: "pointer"
 };
 
 const categoryImageStyle = {
@@ -197,15 +173,13 @@ const productCardStyle = {
   padding: "20px",
   borderRadius: "20px",
   boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
-  textAlign: "center" as const,
-  transition: "all 0.3s ease",
-  cursor: "pointer"
+  textAlign: "center" as const
 };
 
 const productImageStyle = {
   width: "100%",
   height: "220px",
-  objectFit: "contain",
+  objectFit: "contain" as const,
   backgroundColor: "#f5f5f5",
   borderRadius: "14px",
   marginBottom: "20px",
