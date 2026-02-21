@@ -13,6 +13,7 @@ interface Product {
   name: string;
   price: number;
   image_url: string;
+  categoryId?: number;
 }
 
 /* =========================
@@ -46,9 +47,7 @@ export default function Catalogos() {
   const fetchProductsByCategory = async (categoryId: number) => {
     const res = await fetch(`/api/products?categoryId=${categoryId}`);
     const data = await res.json();
-
-    // 🔥 importante porque tu API devuelve { success, result }
-    setProducts(data.result || []);
+    setProducts(data.result || data);
     setSelectedCategory(categoryId);
   };
 
@@ -75,7 +74,19 @@ export default function Catalogos() {
               key={cat.id}
               onClick={() => fetchProductsByCategory(cat.id)}
               style={categoryCardStyle}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-6px)";
+                e.currentTarget.style.boxShadow = "0 12px 30px rgba(0,0,0,0.12)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 6px 18px rgba(0,0,0,0.08)";
+              }}
             >
+              <div style={categoryImageStyle}>
+                <span style={{ color: "#aaa" }}>Miyuki</span>
+              </div>
+
               <h3 style={categoryTitleStyle}>{cat.name}</h3>
             </div>
           ))}
@@ -94,13 +105,24 @@ export default function Catalogos() {
 
           <div style={gridProductsStyle}>
             {products.map((product) => (
-              <div key={product.id} style={productCardStyle}>
+              <div
+                key={product.id}
+                style={productCardStyle}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-6px)";
+                  e.currentTarget.style.boxShadow = "0 12px 30px rgba(0,0,0,0.12)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 6px 18px rgba(0,0,0,0.08)";
+                }}
+              >
                 <img
                   src={product.image_url}
                   alt={product.name}
                   style={productImageStyle}
                 />
-                <h3>{product.name}</h3>
+                <h3 style={{ fontWeight: 500 }}>{product.name}</h3>
                 <p style={priceStyle}>${product.price}</p>
               </div>
             ))}
@@ -114,37 +136,51 @@ export default function Catalogos() {
 }
 
 /* =========================
-   STYLES (Separados)
+   STYLES
 ========================= */
 
 const containerStyle = {
-  padding: "80px 60px",
-  minHeight: "70vh"
+  padding: "100px 60px",
+  minHeight: "70vh",
+  backgroundColor: "#faf9f6"
 };
 
 const titleStyle = {
-  fontSize: "32px",
-  marginBottom: "40px",
-  fontWeight: 600
+  fontSize: "34px",
+  marginBottom: "50px",
+  fontWeight: 600,
+  letterSpacing: "1px"
 };
 
 const gridCategoriesStyle = {
   display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-  gap: "30px"
+  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+  gap: "40px"
 };
 
 const categoryCardStyle = {
   background: "white",
-  padding: "40px",
-  borderRadius: "16px",
-  boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+  padding: "20px",
+  borderRadius: "20px",
+  boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+  textAlign: "center" as const,
   cursor: "pointer",
-  textAlign: "center" as const
+  transition: "all 0.3s ease"
+};
+
+const categoryImageStyle = {
+  width: "100%",
+  height: "160px",
+  borderRadius: "14px",
+  marginBottom: "15px",
+  backgroundColor: "#f0f0f0",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center"
 };
 
 const categoryTitleStyle = {
-  fontSize: "20px",
+  fontSize: "18px",
   fontWeight: 500,
   letterSpacing: "1px"
 };
@@ -159,21 +195,26 @@ const gridProductsStyle = {
 const productCardStyle = {
   background: "white",
   padding: "20px",
-  borderRadius: "16px",
-  boxShadow: "0 8px 20px rgba(0,0,0,0.06)",
-  textAlign: "center" as const
+  borderRadius: "20px",
+  boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+  textAlign: "center" as const,
+  transition: "all 0.3s ease",
+  cursor: "pointer"
 };
 
 const productImageStyle = {
   width: "100%",
-  borderRadius: "12px",
+  height: "220px",
+  objectFit: "cover" as const,
+  borderRadius: "14px",
   marginBottom: "20px"
 };
 
 const priceStyle = {
   color: "#D4AF37",
   fontWeight: 600,
-  marginTop: "10px"
+  marginTop: "10px",
+  fontSize: "16px"
 };
 
 const backButtonStyle = {
@@ -182,6 +223,5 @@ const backButtonStyle = {
   color: "#D4AF37",
   fontSize: "16px",
   cursor: "pointer",
-  marginBottom: "20px"
+  marginBottom: "30px"
 };
-
