@@ -23,6 +23,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/admin" component={Admin} />
       <Route path="/catalogos" component={Categorias} />
+      <Route path="/catalogos/:categoryId" component={Catalogos} />
       <Route path="/productos/:id" component={ProductDetails} />
       <Route component={NotFound} />
     </Switch>
