@@ -7,6 +7,8 @@ import { useParams, useLocation } from "wouter";
 interface Category {
   id: number;
   name: string;
+  slug: string;
+  image_url: string | null;
 }
 
 interface Product {
@@ -41,16 +43,14 @@ export default function Catalogos() {
   }, []);
 
   /* =========================
-     LOAD PRODUCTS BY URL
+     LOAD PRODUCTS
   ========================= */
   useEffect(() => {
     if (!categoryId) return;
 
     fetch(`/api/products?categoryId=${categoryId}`)
       .then(res => res.json())
-      .then(data => {
-        setProducts(data.result || data);
-      })
+      .then(data => setProducts(data.result || data))
       .catch(err => console.error(err));
   }, [categoryId]);
 
@@ -72,9 +72,20 @@ export default function Catalogos() {
               onClick={() => setLocation(`/catalogos/${cat.id}`)}
               style={categoryCardStyle}
             >
-              <div style={categoryImageStyle}>
-                <span style={{ color: "#aaa" }}>Miyuki</span>
+              <div style={categoryImageWrapper}>
+                {cat.image_url ? (
+                  <img
+                    src={cat.image_url}
+                    alt={cat.name}
+                    style={categoryImageStyle}
+                  />
+                ) : (
+                  <div style={placeholderStyle}>
+                    {cat.name}
+                  </div>
+                )}
               </div>
+
               <h3 style={categoryTitleStyle}>{cat.name}</h3>
             </div>
           ))}
@@ -101,7 +112,7 @@ export default function Catalogos() {
                   alt={product.name}
                   style={productImageStyle}
                 />
-                <h3 style={{ fontWeight: 500 }}>{product.name}</h3>
+                <h3 style={productTitleStyle}>{product.name}</h3>
                 <p style={priceStyle}>${product.price}</p>
               </div>
             ))}
@@ -131,34 +142,48 @@ const titleStyle = {
 
 const gridCategoriesStyle = {
   display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
   gap: "40px"
 };
 
 const categoryCardStyle = {
   background: "white",
-  padding: "20px",
   borderRadius: "20px",
-  boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
-  textAlign: "center" as const,
-  cursor: "pointer"
+  overflow: "hidden",
+  boxShadow: "0 8px 25px rgba(0,0,0,0.08)",
+  cursor: "pointer",
+  transition: "all 0.3s ease"
+};
+
+const categoryImageWrapper = {
+  width: "100%",
+  height: "200px",
+  overflow: "hidden"
 };
 
 const categoryImageStyle = {
   width: "100%",
-  height: "160px",
-  borderRadius: "14px",
-  marginBottom: "15px",
-  backgroundColor: "#f0f0f0",
+  height: "100%",
+  objectFit: "cover" as const,
+  transition: "transform 0.4s ease"
+};
+
+const placeholderStyle = {
+  width: "100%",
+  height: "100%",
   display: "flex",
   alignItems: "center",
-  justifyContent: "center"
+  justifyContent: "center",
+  backgroundColor: "#f2f2f2",
+  fontSize: "18px",
+  color: "#999"
 };
 
 const categoryTitleStyle = {
+  padding: "20px",
   fontSize: "18px",
   fontWeight: 500,
-  letterSpacing: "1px"
+  textAlign: "center" as const
 };
 
 const gridProductsStyle = {
@@ -172,7 +197,7 @@ const productCardStyle = {
   background: "white",
   padding: "20px",
   borderRadius: "20px",
-  boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+  boxShadow: "0 8px 25px rgba(0,0,0,0.08)",
   textAlign: "center" as const
 };
 
@@ -180,10 +205,12 @@ const productImageStyle = {
   width: "100%",
   height: "220px",
   objectFit: "contain" as const,
-  backgroundColor: "#f5f5f5",
-  borderRadius: "14px",
-  marginBottom: "20px",
-  padding: "10px"
+  marginBottom: "20px"
+};
+
+const productTitleStyle = {
+  fontWeight: 500,
+  fontSize: "16px"
 };
 
 const priceStyle = {
