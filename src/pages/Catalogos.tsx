@@ -205,9 +205,11 @@ const productCardStyle = {
 const productImageStyle = {
   width: "100%",
   height: "220px",
-  objectFit: "cover" as const,
+  objectFit: "contain",
+  backgroundColor: "#f5f5f5",
   borderRadius: "14px",
-  marginBottom: "20px"
+  marginBottom: "20px",
+  padding: "10px"
 };
 
 const priceStyle = {
