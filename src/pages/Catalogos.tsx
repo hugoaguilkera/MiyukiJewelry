@@ -25,15 +25,8 @@ return (
               borderRadius: "16px",
               boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
               cursor: "pointer",
-              textAlign: "center",
-              transition: "all 0.3s ease"
+              textAlign: "center"
             }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.transform = "translateY(-6px)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.transform = "translateY(0px)")
-            }
           >
             <h3 style={{
               fontSize: "20px",
