@@ -13,7 +13,7 @@ export default async function handler(
     // ==============================
     if (req.method === "GET") {
       const products = await sql`
-        SELECT id, name, price, image_url
+        SELECT id, name, price, image_url, category
         FROM products
         ORDER BY id DESC
       `;
@@ -28,7 +28,7 @@ export default async function handler(
     // POST → Crear producto
     // ==============================
     if (req.method === "POST") {
-      const { name, price, image_url } = req.body;
+      const { name, price, image_url, category } = req.body;
 
       if (!name || !price) {
         return res.status(400).json({
@@ -37,8 +37,8 @@ export default async function handler(
       }
 
       const newProduct = await sql`
-        INSERT INTO products (name, price, image_url)
-        VALUES (${name}, ${price}, ${image_url})
+        INSERT INTO products (name, price, image_url, category)
+        VALUES (${name}, ${price}, ${image_url}, ${category})
         RETURNING *
       `;
 
