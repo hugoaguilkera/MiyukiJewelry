@@ -13,23 +13,14 @@ export default async function handler(
     // =========================================================
     if (req.method === "GET") {
 
-      // 🔎 Si viene categoryId en la query
       if (req.query.categoryId) {
 
         const categoryId = Number(req.query.categoryId);
 
-        // 1️⃣ Obtener nombre real de la categoría
-        const categoryRow = await sql`
-          SELECT name FROM categories WHERE id = ${categoryId}
-        `;
-
-        const categoryName = categoryRow[0]?.name;
-
-        // 2️⃣ Filtrar productos por nombre de categoría
         const products = await sql`
-          SELECT id, name, price, image_url, category
+          SELECT id, name, price, image_url, category_id
           FROM products
-          WHERE category = ${categoryName}
+          WHERE category_id = ${categoryId}
           ORDER BY id DESC
         `;
 
@@ -39,9 +30,9 @@ export default async function handler(
         });
       }
 
-      // 🔎 Si NO hay filtro → traer todos los productos
+      // 🔎 Traer todos los productos
       const products = await sql`
-        SELECT id, name, price, image_url, category
+        SELECT id, name, price, image_url, category_id
         FROM products
         ORDER BY id DESC
       `;
@@ -57,17 +48,17 @@ export default async function handler(
     // =========================================================
     if (req.method === "POST") {
 
-      const { name, price, image_url, category } = req.body;
+      const { name, price, image_url, categoryId } = req.body;
 
-      if (!name || !price || !category) {
+      if (!name || !price || !categoryId) {
         return res.status(400).json({
-          error: "name, price and category are required"
+          error: "name, price and categoryId are required"
         });
       }
 
       const newProduct = await sql`
-        INSERT INTO products (name, price, image_url, category)
-        VALUES (${name}, ${price}, ${image_url}, ${category})
+        INSERT INTO products (name, price, image_url, category_id)
+        VALUES (${name}, ${price}, ${image_url}, ${categoryId})
         RETURNING *
       `;
 
@@ -77,9 +68,6 @@ export default async function handler(
       });
     }
 
-    // =========================================================
-    // METHOD NOT ALLOWED
-    // =========================================================
     return res.status(405).json({
       error: "Method not allowed"
     });
