@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Admin from "./pages/Admin";
 import ProductDetails from "./pages/ProductDetails";
 import Catalogos from "./pages/Catalogos";
+import Categorias from "./pages/Categorias";
 
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
@@ -21,7 +22,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/admin" component={Admin} />
-      <Route path="/catalogos" component={Catalogos} />
+      <Route path="/catalogos" component={Categorias} />
       <Route path="/productos/:id" component={ProductDetails} />
       <Route component={NotFound} />
     </Switch>
