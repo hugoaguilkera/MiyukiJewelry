@@ -61,9 +61,7 @@ export default function Catalogos() {
     <div style={containerStyle}>
       <h1 style={titleStyle}>Catálogos Miyuki</h1>
 
-      {/* =========================
-         CATEGORY VIEW
-      ========================= */}
+      {/* CATEGORY VIEW */}
       {!categoryId && (
         <div style={gridCategoriesStyle}>
           {categories.map((cat) => (
@@ -81,7 +79,7 @@ export default function Catalogos() {
                   />
                 ) : (
                   <div style={placeholderStyle}>
-                    {cat.name}
+                    Sin imagen
                   </div>
                 )}
               </div>
@@ -92,9 +90,7 @@ export default function Catalogos() {
         </div>
       )}
 
-      {/* =========================
-         PRODUCTS VIEW
-      ========================= */}
+      {/* PRODUCTS VIEW */}
       {categoryId && (
         <div>
           <button
@@ -142,7 +138,7 @@ const titleStyle = {
 
 const gridCategoriesStyle = {
   display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
   gap: "40px"
 };
 
@@ -150,22 +146,22 @@ const categoryCardStyle = {
   background: "white",
   borderRadius: "20px",
   overflow: "hidden",
-  boxShadow: "0 8px 25px rgba(0,0,0,0.08)",
+  boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
   cursor: "pointer",
   transition: "all 0.3s ease"
 };
 
 const categoryImageWrapper = {
   width: "100%",
-  height: "200px",
-  overflow: "hidden"
+  height: "180px",
+  overflow: "hidden",
+  backgroundColor: "#f0f0f0"
 };
 
 const categoryImageStyle = {
   width: "100%",
   height: "100%",
-  objectFit: "cover" as const,
-  transition: "transform 0.4s ease"
+  objectFit: "cover" as const
 };
 
 const placeholderStyle = {
@@ -174,9 +170,7 @@ const placeholderStyle = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  backgroundColor: "#f2f2f2",
-  fontSize: "18px",
-  color: "#999"
+  color: "#aaa"
 };
 
 const categoryTitleStyle = {
@@ -197,7 +191,7 @@ const productCardStyle = {
   background: "white",
   padding: "20px",
   borderRadius: "20px",
-  boxShadow: "0 8px 25px rgba(0,0,0,0.08)",
+  boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
   textAlign: "center" as const
 };
 
