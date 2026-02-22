@@ -36,11 +36,13 @@ export default function Catalogos() {
      LOAD CATEGORIES
   ========================= */
   useEffect(() => {
-    fetch("/api/categories")
-      .then(res => res.json())
-      .then(data => setCategories(data))
-      .catch(err => console.error(err));
-  }, []);
+  fetch("/api/categories")
+    .then(res => res.json())
+    .then(data => {
+      setCategories(data.result || data);
+    })
+    .catch(err => console.error(err));
+}, []);
 
   /* =========================
      LOAD PRODUCTS
