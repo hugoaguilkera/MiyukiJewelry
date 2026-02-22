@@ -23,35 +23,49 @@ export default function Categorias() {
   }, []);
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Categorías</h1>
+    <div className="px-8 py-16 bg-[#faf9f6] min-h-screen">
+      
+      {/* TITLE */}
+      <h1 className="text-4xl font-semibold tracking-wide mb-12 text-center">
+        Categorías
+      </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {categories.map(category => (
           <Link key={category.id} href={`/catalogos/${category.id}`}>
-            <div className="cursor-pointer border rounded-lg overflow-hidden hover:shadow-lg transition">
+            
+            <div className="cursor-pointer rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition duration-500 group relative">
 
-              <div className="h-48 w-full">
-                {category.image_url ? (
+              {category.image_url ? (
+                <>
+                  {/* IMAGE */}
                   <img
                     src={category.image_url}
                     alt={category.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-72 object-cover transform group-hover:scale-105 transition duration-700"
                   />
-                ) : (
-                  <div className="h-full flex items-center justify-center bg-gray-100">
-                    <span className="text-lg font-semibold">
-                      {category.name}
-                    </span>
-                  </div>
-                )}
-              </div>
 
-              <div className="p-4 text-center font-semibold">
-                {category.name}
-              </div>
+                  {/* DARK OVERLAY */}
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition duration-500"></div>
+
+                  {/* TITLE OVER IMAGE */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <h2 className="text-white text-3xl font-semibold tracking-wide drop-shadow-lg">
+                      {category.name}
+                    </h2>
+                  </div>
+                </>
+              ) : (
+                <div className="h-72 flex items-center justify-center bg-gray-200">
+                  <span className="text-xl font-semibold text-gray-600">
+                    {category.name}
+                  </span>
+                </div>
+              )}
 
             </div>
+
           </Link>
         ))}
       </div>
