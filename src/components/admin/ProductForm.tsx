@@ -7,11 +7,24 @@ import { z } from "zod";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Upload } from "lucide-react";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const ProductForm = () => {
   const { toast } = useToast();
@@ -58,10 +71,8 @@ const ProductForm = () => {
     }
   };
 
-  // 🔥 CORRECCIÓN ALINEADA CON BACKEND
   const addProductMutation = useMutation({
     mutationFn: async (data: z.infer<typeof productFormSchema>) => {
-
       const categoryMap: Record<string, number> = {
         collares: 1,
         pulseras: 2,
@@ -72,7 +83,7 @@ const ProductForm = () => {
       const payload = {
         name: data.name,
         price: Number(data.price),
-        image_url: data.imageUrl,
+        image_url: data.imageUrl, // 🔥 ESTE ES EL CAMBIO CLAVE
         categoryId: categoryMap[data.category],
       };
 
@@ -120,12 +131,8 @@ const ProductForm = () => {
       </h3>
 
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
             <FormField
               control={form.control}
               name="name"
@@ -169,7 +176,6 @@ const ProductForm = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
             <FormField
               control={form.control}
               name="price"
@@ -187,7 +193,7 @@ const ProductForm = () => {
             <FormField
               control={form.control}
               name="imageUrl"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <FormLabel>Imagen</FormLabel>
                   <FormControl>
@@ -253,11 +259,10 @@ const ProductForm = () => {
               Agregar producto
             </Button>
           </div>
-
         </form>
       </Form>
     </div>
   );
 };
 
-export default ProductForm;  
+export default ProductForm;
