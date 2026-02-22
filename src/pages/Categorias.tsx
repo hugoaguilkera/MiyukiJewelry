@@ -15,59 +15,45 @@ export default function Categorias() {
     fetch("/api/categories")
       .then(res => res.json())
       .then(data => setCategories(data.result || data))
-      .catch(error => {
-        console.error("Error fetching categories:", error);
-      });
+      .catch(error => console.error(error));
   }, []);
 
   return (
-    <div className="px-10 py-20 bg-[#faf9f6] min-h-screen">
+    <div className="px-12 py-24 bg-[#f9f8f4] min-h-screen">
 
-      {/* HEADER */}
-      <h1 className="text-4xl font-semibold tracking-wide text-center mb-16">
+      <h1 className="text-5xl font-light tracking-wide text-center mb-20">
         Categorías
       </h1>
 
-      {/* GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
         {categories.map(category => (
           <Link key={category.id} href={`/catalogos/${category.id}`}>
 
-            <div className="cursor-pointer rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition duration-500 group relative bg-white">
+            <div className="group cursor-pointer text-center">
 
-              {category.image_url ? (
-                <>
-                  {/* IMAGE CON ENFOQUE AJUSTADO */}
+              {/* IMAGE CARD */}
+              <div className="relative bg-white rounded-3xl shadow-sm hover:shadow-xl transition duration-500 overflow-hidden">
+
+                {category.image_url && (
                   <img
                     src={category.image_url}
                     alt={category.name}
-                    className="w-full h-80 object-contain object-[center_65%] bg-[#f8f6f1] p-10 transition duration-700 group-hover:scale-105"
+                    className="w-full h-96 object-contain p-12 transition duration-700 group-hover:scale-105"
                   />
+                )}
 
-                  {/* OVERLAY SUAVE */}
-                  <div className="absolute inset-0 bg-black/5 group-hover:bg-black/10 transition duration-500"></div>
+              </div>
 
-                  {/* TITULO SOBRE IMAGEN */}
-                  <div className="absolute bottom-6 left-0 right-0 text-center">
-                    <h2 className="text-2xl font-semibold tracking-wide text-gray-800">
-                      {category.name}
-                    </h2>
-                  </div>
-                </>
-              ) : (
-                <div className="h-80 flex items-center justify-center bg-gray-200">
-                  <span className="text-xl font-semibold text-gray-600">
-                    {category.name}
-                  </span>
-                </div>
-              )}
+              {/* TITLE */}
+              <h2 className="mt-8 text-xl font-medium tracking-wide text-gray-800 group-hover:text-[#b89b5e] transition">
+                {category.name}
+              </h2>
 
             </div>
 
           </Link>
         ))}
       </div>
-
     </div>
   );
 }
