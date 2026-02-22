@@ -36,13 +36,11 @@ export default function Catalogos() {
      LOAD CATEGORIES
   ========================= */
   useEffect(() => {
-  fetch("/api/categories")
-    .then(res => res.json())
-    .then(data => {
-      setCategories(data.result || data);
-    })
-    .catch(err => console.error(err));
-}, []);
+    fetch("/api/categories")
+      .then(res => res.json())
+      .then(data => setCategories(data.result || data))
+      .catch(err => console.error(err));
+  }, []);
 
   /* =========================
      LOAD PRODUCTS
@@ -74,12 +72,17 @@ export default function Catalogos() {
               onClick={() => setLocation(`/catalogos/${cat.id}`)}
               style={categoryCardStyle}
             >
-              <div style={categoryImageWrapper}>
+              <div style={{ width: "100%", height: "220px" }}>
                 {cat.image_url ? (
                   <img
                     src={cat.image_url}
                     alt={cat.name}
-                    style={categoryImageStyle}
+                    style={{
+                      width: "100%",
+                      height: "220px",
+                      objectFit: "cover",
+                      display: "block"
+                    }}
                   />
                 ) : (
                   <div style={placeholderStyle}>
@@ -155,25 +158,13 @@ const categoryCardStyle = {
   cursor: "pointer"
 };
 
-const categoryImageWrapper = {
-  width: "100%",
-  height: "200px",
-  overflow: "hidden",
-  backgroundColor: "#f0f0f0"
-};
-
-const categoryImageStyle = {
-  width: "100%",
-  height: "100%",
-  objectFit: "cover" as const
-};
-
 const placeholderStyle = {
   width: "100%",
-  height: "100%",
+  height: "220px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  backgroundColor: "#f0f0f0",
   color: "#999",
   fontSize: "18px"
 };
