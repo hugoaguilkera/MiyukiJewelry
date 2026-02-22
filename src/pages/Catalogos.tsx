@@ -59,9 +59,11 @@ export default function Catalogos() {
   ========================= */
   return (
     <div style={containerStyle}>
-      <h1 style={titleStyle}>Catálogos Miyuki</h1>
+      <h1 style={titleStyle}>Categorías</h1>
 
-      {/* CATEGORY VIEW */}
+      {/* =========================
+         CATEGORY VIEW
+      ========================= */}
       {!categoryId && (
         <div style={gridCategoriesStyle}>
           {categories.map((cat) => (
@@ -79,7 +81,7 @@ export default function Catalogos() {
                   />
                 ) : (
                   <div style={placeholderStyle}>
-                    Sin imagen
+                    {cat.name}
                   </div>
                 )}
               </div>
@@ -90,7 +92,9 @@ export default function Catalogos() {
         </div>
       )}
 
-      {/* PRODUCTS VIEW */}
+      {/* =========================
+         PRODUCTS VIEW
+      ========================= */}
       {categoryId && (
         <div>
           <button
@@ -130,15 +134,14 @@ const containerStyle = {
 };
 
 const titleStyle = {
-  fontSize: "34px",
-  marginBottom: "50px",
-  fontWeight: 600,
-  letterSpacing: "1px"
+  fontSize: "32px",
+  marginBottom: "40px",
+  fontWeight: 600
 };
 
 const gridCategoriesStyle = {
   display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
   gap: "40px"
 };
 
@@ -147,13 +150,12 @@ const categoryCardStyle = {
   borderRadius: "20px",
   overflow: "hidden",
   boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
-  cursor: "pointer",
-  transition: "all 0.3s ease"
+  cursor: "pointer"
 };
 
 const categoryImageWrapper = {
   width: "100%",
-  height: "180px",
+  height: "200px",
   overflow: "hidden",
   backgroundColor: "#f0f0f0"
 };
@@ -170,14 +172,14 @@ const placeholderStyle = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  color: "#aaa"
+  color: "#999",
+  fontSize: "18px"
 };
 
 const categoryTitleStyle = {
   padding: "20px",
-  fontSize: "18px",
-  fontWeight: 500,
-  textAlign: "center" as const
+  textAlign: "center" as const,
+  fontWeight: 500
 };
 
 const gridProductsStyle = {
@@ -203,22 +205,19 @@ const productImageStyle = {
 };
 
 const productTitleStyle = {
-  fontWeight: 500,
-  fontSize: "16px"
+  fontWeight: 500
 };
 
 const priceStyle = {
   color: "#D4AF37",
   fontWeight: 600,
-  marginTop: "10px",
-  fontSize: "16px"
+  marginTop: "10px"
 };
 
 const backButtonStyle = {
   background: "none",
   border: "none",
   color: "#D4AF37",
-  fontSize: "16px",
   cursor: "pointer",
-  marginBottom: "30px"
+  marginBottom: "20px"
 };
