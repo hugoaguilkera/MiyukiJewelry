@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===============================
-   BASE CONFIG
-================================= */
 @layer base {
   * {
     @apply border-border;
@@ -15,14 +12,11 @@
   }
 }
 
-/* ===============================
-   LUXURY ANIMATION
-================================= */
-
+/* Animación elegante */
 @keyframes fadeInUp {
   0% {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(25px);
   }
   100% {
     opacity: 1;
@@ -31,18 +25,5 @@
 }
 
 .animate-fadeInUp {
-  animation: fadeInUp 0.9s ease forwards;
-}
-
-/* ===============================
-   SMOOTH FADE
-================================= */
-
-@keyframes fadeSoft {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-.animate-fadeSoft {
-  animation: fadeSoft 1.2s ease forwards;
+  animation: fadeInUp 0.8s ease forwards;
 }
