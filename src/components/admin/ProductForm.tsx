@@ -1,4 +1,3 @@
-import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -6,7 +5,7 @@ import { productFormSchema } from "@shared/schema";
 import { z } from "zod";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Upload } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -29,8 +28,6 @@ import {
 const ProductForm = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof productFormSchema>>({
     resolver: zodResolver(productFormSchema),
@@ -43,36 +40,9 @@ const ProductForm = () => {
     },
   });
 
-  const uploadImage = async (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-    });
-  };
-
-  const handleImageChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const base64Image = await uploadImage(file);
-      setPreviewImage(base64Image);
-      form.setValue("imageUrl", base64Image);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "No se pudo cargar la imagen.",
-        variant: "destructive",
-      });
-    }
-  };
-
   const addProductMutation = useMutation({
     mutationFn: async (data: z.infer<typeof productFormSchema>) => {
+
       const categoryMap: Record<string, number> = {
         collares: 1,
         pulseras: 2,
@@ -83,15 +53,11 @@ const ProductForm = () => {
       const payload = {
         name: data.name,
         price: Number(data.price),
-        image_url: data.imageUrl, // 🔥 ESTE ES EL CAMBIO CLAVE
+        image_url: data.imageUrl,
         categoryId: categoryMap[data.category],
       };
 
       const response = await apiRequest("POST", "/api/products", payload);
-
-      if (!response.ok) {
-        throw new Error("Error al insertar producto");
-      }
 
       return response.json();
     },
@@ -103,20 +69,18 @@ const ProductForm = () => {
       });
 
       form.reset();
-      setPreviewImage(null);
 
       queryClient.invalidateQueries({
         queryKey: ["/api/products"],
       });
     },
 
-    onError: (error) => {
+    onError: () => {
       toast({
         title: "Error",
         description: "Hubo un problema al agregar el producto.",
         variant: "destructive",
       });
-      console.error(error);
     },
   });
 
@@ -132,7 +96,9 @@ const ProductForm = () => {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
             <FormField
               control={form.control}
               name="name"
@@ -173,9 +139,11 @@ const ProductForm = () => {
                 </FormItem>
               )}
             />
+
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
             <FormField
               control={form.control}
               name="price"
@@ -193,45 +161,20 @@ const ProductForm = () => {
             <FormField
               control={form.control}
               name="imageUrl"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Imagen</FormLabel>
+                  <FormLabel>URL de la imagen (Cloudinary)</FormLabel>
                   <FormControl>
-                    <>
-                      <Input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        ref={fileInputRef}
-                        onChange={handleImageChange}
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() =>
-                          fileInputRef.current?.click()
-                        }
-                      >
-                        <Upload className="mr-2 h-4 w-4" />
-                        Seleccionar imagen
-                      </Button>
-                    </>
+                    <Input
+                      {...field}
+                      placeholder="https://res.cloudinary.com/..."
+                    />
                   </FormControl>
-
-                  {previewImage && (
-                    <div className="mt-2 h-20 w-20 overflow-hidden rounded-md">
-                      <img
-                        src={previewImage}
-                        alt="Preview"
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                  )}
-
                   <FormMessage />
                 </FormItem>
               )}
             />
+
           </div>
 
           <FormField
@@ -259,6 +202,7 @@ const ProductForm = () => {
               Agregar producto
             </Button>
           </div>
+
         </form>
       </Form>
     </div>
