@@ -44,24 +44,17 @@ const ProductForm = () => {
 
   const addProductMutation = useMutation({
     mutationFn: async (data: FormData) => {
-      // 🔥 Conversión segura de categoría a ID real
-      const categoryId = Number(data.category);
-
-      if (!categoryId) {
-        throw new Error("Categoría inválida");
-      }
 
       const payload = {
         name: data.name.trim(),
         price: Number(data.price),
         image_url: data.imageUrl?.trim() || null,
-        categoryId: categoryId,
+        categoryId: Number(data.category),
       };
 
       console.log("PAYLOAD ENVIADO:", payload);
 
       const response = await apiRequest("POST", "/api/products", payload);
-
       return response.json();
     },
 
@@ -126,7 +119,7 @@ const ProductForm = () => {
                   <FormLabel>Categoría</FormLabel>
                   <Select
                     value={field.value}
-                    onValueChange={field.onChange}
+                    onValueChange={(value) => field.onChange(value)}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -134,7 +127,7 @@ const ProductForm = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {/* 🔥 Enviamos ID REAL como value */}
+                      {/* ID REAL como value */}
                       <SelectItem value="1">Collares</SelectItem>
                       <SelectItem value="2">Pulseras</SelectItem>
                       <SelectItem value="3">Aretes</SelectItem>
