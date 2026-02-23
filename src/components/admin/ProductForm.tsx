@@ -42,7 +42,6 @@ const ProductForm = () => {
 
   const addProductMutation = useMutation({
     mutationFn: async (data: z.infer<typeof productFormSchema>) => {
-
       const categoryMap: Record<string, number> = {
         collares: 1,
         pulseras: 2,
@@ -56,6 +55,8 @@ const ProductForm = () => {
         image_url: data.imageUrl,
         categoryId: categoryMap[data.category],
       };
+
+      console.log("ENVIANDO:", payload);
 
       const response = await apiRequest("POST", "/api/products", payload);
 
@@ -120,8 +121,8 @@ const ProductForm = () => {
                 <FormItem>
                   <FormLabel>Categoría</FormLabel>
                   <Select
+                    value={field.value}
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
