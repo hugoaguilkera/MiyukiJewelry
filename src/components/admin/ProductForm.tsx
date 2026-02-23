@@ -25,11 +25,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+type FormData = z.infer<typeof productFormSchema>;
+
 const ProductForm = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const form = useForm<z.infer<typeof productFormSchema>>({
+  const form = useForm<FormData>({
     resolver: zodResolver(productFormSchema),
     defaultValues: {
       name: "",
@@ -41,22 +43,22 @@ const ProductForm = () => {
   });
 
   const addProductMutation = useMutation({
-    mutationFn: async (data: z.infer<typeof productFormSchema>) => {
-      const categoryMap: Record<string, number> = {
-        collares: 1,
-        pulseras: 2,
-        aretes: 3,
-        anillos: 4,
-      };
+    mutationFn: async (data: FormData) => {
+      // 🔥 Conversión segura de categoría a ID real
+      const categoryId = Number(data.category);
+
+      if (!categoryId) {
+        throw new Error("Categoría inválida");
+      }
 
       const payload = {
-        name: data.name,
+        name: data.name.trim(),
         price: Number(data.price),
-        image_url: data.imageUrl,
-        categoryId: categoryMap[data.category],
+        image_url: data.imageUrl?.trim() || null,
+        categoryId: categoryId,
       };
 
-      console.log("ENVIANDO:", payload);
+      console.log("PAYLOAD ENVIADO:", payload);
 
       const response = await apiRequest("POST", "/api/products", payload);
 
@@ -66,7 +68,7 @@ const ProductForm = () => {
     onSuccess: () => {
       toast({
         title: "Producto agregado",
-        description: "El producto ha sido agregado exitosamente.",
+        description: "Guardado correctamente.",
       });
 
       form.reset();
@@ -76,16 +78,17 @@ const ProductForm = () => {
       });
     },
 
-    onError: () => {
+    onError: (error: any) => {
+      console.error(error);
       toast({
         title: "Error",
-        description: "Hubo un problema al agregar el producto.",
+        description: error.message || "Falló el guardado.",
         variant: "destructive",
       });
     },
   });
 
-  const onSubmit = (data: z.infer<typeof productFormSchema>) => {
+  const onSubmit = (data: FormData) => {
     addProductMutation.mutate(data);
   };
 
@@ -96,8 +99,9 @@ const ProductForm = () => {
       </h3>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 
+          {/* Nombre + Categoría */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
             <FormField
@@ -130,10 +134,11 @@ const ProductForm = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="collares">Collares</SelectItem>
-                      <SelectItem value="pulseras">Pulseras</SelectItem>
-                      <SelectItem value="aretes">Aretes</SelectItem>
-                      <SelectItem value="anillos">Anillos</SelectItem>
+                      {/* 🔥 Enviamos ID REAL como value */}
+                      <SelectItem value="1">Collares</SelectItem>
+                      <SelectItem value="2">Pulseras</SelectItem>
+                      <SelectItem value="3">Aretes</SelectItem>
+                      <SelectItem value="4">Anillos</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -143,6 +148,7 @@ const ProductForm = () => {
 
           </div>
 
+          {/* Precio + Imagen */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
             <FormField
@@ -152,7 +158,7 @@ const ProductForm = () => {
                 <FormItem>
                   <FormLabel>Precio ($)</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" />
+                    <Input {...field} type="number" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -178,6 +184,7 @@ const ProductForm = () => {
 
           </div>
 
+          {/* Descripción */}
           <FormField
             control={form.control}
             name="description"
@@ -192,6 +199,7 @@ const ProductForm = () => {
             )}
           />
 
+          {/* Botón */}
           <div className="flex justify-end">
             <Button
               type="submit"
