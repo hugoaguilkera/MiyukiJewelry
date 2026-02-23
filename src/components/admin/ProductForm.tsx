@@ -35,8 +35,8 @@ const ProductForm = () => {
     resolver: zodResolver(productFormSchema),
     defaultValues: {
       name: "",
-      price: "",
-      category: "",
+      price: 0,
+      categoryId: 0,
       description: "",
       imageUrl: "",
     },
@@ -44,17 +44,22 @@ const ProductForm = () => {
 
   const addProductMutation = useMutation({
     mutationFn: async (data: FormData) => {
-
       const payload = {
         name: data.name.trim(),
         price: Number(data.price),
         image_url: data.imageUrl?.trim() || null,
-        categoryId: Number(data.category),
+        categoryId: data.categoryId,
       };
 
       console.log("PAYLOAD ENVIADO:", payload);
 
       const response = await apiRequest("POST", "/api/products", payload);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "Error al insertar producto");
+      }
+
       return response.json();
     },
 
@@ -64,7 +69,13 @@ const ProductForm = () => {
         description: "Guardado correctamente.",
       });
 
-      form.reset();
+      form.reset({
+        name: "",
+        price: 0,
+        categoryId: 0,
+        description: "",
+        imageUrl: "",
+      });
 
       queryClient.invalidateQueries({
         queryKey: ["/api/products"],
@@ -113,13 +124,13 @@ const ProductForm = () => {
 
             <FormField
               control={form.control}
-              name="category"
+              name="categoryId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Categoría</FormLabel>
                   <Select
-                    value={field.value}
-                    onValueChange={(value) => field.onChange(value)}
+                    value={field.value ? String(field.value) : ""}
+                    onValueChange={(value) => field.onChange(Number(value))}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -127,7 +138,6 @@ const ProductForm = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {/* ID REAL como value */}
                       <SelectItem value="1">Collares</SelectItem>
                       <SelectItem value="2">Pulseras</SelectItem>
                       <SelectItem value="3">Aretes</SelectItem>
@@ -151,7 +161,11 @@ const ProductForm = () => {
                 <FormItem>
                   <FormLabel>Precio ($)</FormLabel>
                   <FormControl>
-                    <Input {...field} type="number" />
+                    <Input
+                      type="number"
+                      value={field.value}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
