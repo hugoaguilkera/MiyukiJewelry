@@ -1,8 +1,19 @@
-import { pgTable, text, serial, integer, real, timestamp } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  serial,
+  integer,
+  real,
+  timestamp
+} from "drizzle-orm/pg-core";
+
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-// Users table (keeping the existing one)
+/* =====================================================
+   USERS
+===================================================== */
+
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
@@ -14,7 +25,10 @@ export const insertUserSchema = createInsertSchema(users).pick({
   password: true,
 });
 
-// Categories table
+/* =====================================================
+   CATEGORIES
+===================================================== */
+
 export const categories = pgTable("categories", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -28,27 +42,61 @@ export const insertCategorySchema = createInsertSchema(categories).pick({
   imageUrl: true,
 });
 
-// Products table
+/* =====================================================
+   PRODUCTS
+===================================================== */
+
 export const products = pgTable("products", {
   id: serial("id").primaryKey(),
+
   name: text("name").notNull(),
+
   price: real("price").notNull(),
+
   description: text("description"),
+
   imageUrl: text("image_url"),
+
+  // 🔥 Aseguramos que SIEMPRE sea número entero válido
   categoryId: integer("category_id").notNull(),
+
   rating: real("rating").default(0),
+
   reviewCount: integer("review_count").default(0),
+
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const insertProductSchema = createInsertSchema(products).omit({
-  id: true,
-  createdAt: true,
-  rating: true,
-  reviewCount: true,
-});
+/* -----------------------------------------------------
+   INSERT PRODUCT SCHEMA CORREGIDO
+----------------------------------------------------- */
 
-// Testimonials table
+export const insertProductSchema = createInsertSchema(products)
+  .omit({
+    id: true,
+    createdAt: true,
+    rating: true,
+    reviewCount: true,
+  })
+  .extend({
+    // 🔥 Forzamos que categoryId sea número real
+    categoryId: z.number({
+      required_error: "La categoría es obligatoria",
+      invalid_type_error: "La categoría debe ser número",
+    }),
+
+    price: z.number({
+      required_error: "El precio es obligatorio",
+      invalid_type_error: "El precio debe ser número",
+    }),
+
+    imageUrl: z.string().nullable().optional(),
+  });
+
+/* =====================================================
+   TESTIMONIALS
+===================================================== */
+
 export const testimonials = pgTable("testimonials", {
   id: serial("id").primaryKey(),
   customerName: text("customer_name").notNull(),
@@ -64,7 +112,10 @@ export const insertTestimonialSchema = createInsertSchema(testimonials).omit({
   createdAt: true,
 });
 
-// Contact messages table
+/* =====================================================
+   CONTACT MESSAGES
+===================================================== */
+
 export const contactMessages = pgTable("contact_messages", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
@@ -74,12 +125,16 @@ export const contactMessages = pgTable("contact_messages", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const insertContactMessageSchema = createInsertSchema(contactMessages).omit({
-  id: true,
-  createdAt: true,
-});
+export const insertContactMessageSchema =
+  createInsertSchema(contactMessages).omit({
+    id: true,
+    createdAt: true,
+  });
 
-// Types for our schema
+/* =====================================================
+   TYPES
+===================================================== */
+
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 
@@ -94,3 +149,4 @@ export type InsertTestimonial = z.infer<typeof insertTestimonialSchema>;
 
 export type ContactMessage = typeof contactMessages.$inferSelect;
 export type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;
+
