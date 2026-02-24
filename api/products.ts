@@ -15,7 +15,7 @@ export default async function handler(
     const sql = neon(process.env.DATABASE_URL);
 
     // =========================================================
-    // GET → Obtener productos (con filtro opcional por categoría)
+    // GET → Obtener productos
     // =========================================================
     if (req.method === "GET") {
       try {
@@ -29,7 +29,12 @@ export default async function handler(
           }
 
           const products = await sql`
-            SELECT id, name, price, image_url, category_id
+            SELECT 
+              id,
+              name,
+              price,
+              image_url AS "imageUrl",
+              category_id AS "categoryId"
             FROM products
             WHERE category_id = ${categoryId}
             ORDER BY id DESC
@@ -42,7 +47,12 @@ export default async function handler(
         }
 
         const products = await sql`
-          SELECT id, name, price, image_url, category_id
+          SELECT 
+            id,
+            name,
+            price,
+            image_url AS "imageUrl",
+            category_id AS "categoryId"
           FROM products
           ORDER BY id DESC
         `;
@@ -66,7 +76,6 @@ export default async function handler(
       try {
         const { name, price, imageUrl, categoryId } = req.body;
 
-        // 🔥 Validación fuerte y correcta
         if (
           typeof name !== "string" ||
           name.trim() === "" ||
@@ -88,7 +97,12 @@ export default async function handler(
             ${imageUrl ?? null},
             ${categoryId}
           )
-          RETURNING id, name, price, image_url, category_id
+          RETURNING 
+            id,
+            name,
+            price,
+            image_url AS "imageUrl",
+            category_id AS "categoryId"
         `;
 
         return res.status(201).json({
@@ -114,6 +128,5 @@ export default async function handler(
     });
   }
 }
-
 
 
