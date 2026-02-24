@@ -36,7 +36,7 @@ const ProductForm = () => {
     defaultValues: {
       name: "",
       price: 0,
-      categoryId: 2, // 🔥 valor inicial coherente (Pulseras por ejemplo)
+      categoryId: 1, // valor inicial coherente
       description: "",
       imageUrl: "",
     },
@@ -44,7 +44,7 @@ const ProductForm = () => {
 
   const addProductMutation = useMutation({
     mutationFn: async (data: FormData) => {
-      console.log("CATEGORY ENVIADA:", data.categoryId);
+      console.log("CATEGORY ENVIADA AL BACKEND:", data.categoryId);
 
       const payload = {
         name: data.name.trim(),
@@ -73,7 +73,7 @@ const ProductForm = () => {
       form.reset({
         name: "",
         price: 0,
-        categoryId: 2,
+        categoryId: 1,
         description: "",
         imageUrl: "",
       });
@@ -106,7 +106,6 @@ const ProductForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 
-          {/* Nombre + Categoría */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
             <FormField
@@ -129,24 +128,26 @@ const ProductForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Categoría</FormLabel>
-                  <Select
-                    value={String(field.value)}
-                    onValueChange={(value) =>
-                      field.onChange(Number(value))
-                    }
-                  >
-                    <FormControl>
+                  <FormControl>
+                    <Select
+                      value={String(field.value)}
+                      onValueChange={(value) => {
+                        const numericValue = parseInt(value, 10);
+                        console.log("VALOR SELECCIONADO:", numericValue);
+                        field.onChange(numericValue);
+                      }}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Seleccione una categoría" />
                       </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="1">Collares</SelectItem>
-                      <SelectItem value="2">Pulseras</SelectItem>
-                      <SelectItem value="3">Aretes</SelectItem>
-                      <SelectItem value="4">Anillos</SelectItem>
-                    </SelectContent>
-                  </Select>
+                      <SelectContent>
+                        <SelectItem value="1">Collares</SelectItem>
+                        <SelectItem value="2">Pulseras</SelectItem>
+                        <SelectItem value="3">Aretes</SelectItem>
+                        <SelectItem value="4">Anillos</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -154,7 +155,6 @@ const ProductForm = () => {
 
           </div>
 
-          {/* Precio + Imagen */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
             <FormField
@@ -193,7 +193,6 @@ const ProductForm = () => {
 
           </div>
 
-          {/* Descripción */}
           <FormField
             control={form.control}
             name="description"
