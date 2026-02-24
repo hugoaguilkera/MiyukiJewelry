@@ -36,7 +36,7 @@ const ProductForm = () => {
     defaultValues: {
       name: "",
       price: 0,
-      categoryId: 1, // valor inicial coherente
+      categoryId: 2, // valor inicial coherente
       description: "",
       imageUrl: "",
     },
