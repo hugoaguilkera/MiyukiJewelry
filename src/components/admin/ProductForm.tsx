@@ -36,7 +36,7 @@ const ProductForm = () => {
     defaultValues: {
       name: "",
       price: 0,
-      categoryId: 0,
+      categoryId: 2, // 🔥 valor inicial coherente (Pulseras por ejemplo)
       description: "",
       imageUrl: "",
     },
@@ -44,14 +44,15 @@ const ProductForm = () => {
 
   const addProductMutation = useMutation({
     mutationFn: async (data: FormData) => {
+      console.log("CATEGORY ENVIADA:", data.categoryId);
+
       const payload = {
         name: data.name.trim(),
         price: Number(data.price),
-        image_url: data.imageUrl?.trim() || null,
-        categoryId: data.categoryId,
+        description: data.description?.trim() || null,
+        imageUrl: data.imageUrl?.trim() || null,
+        categoryId: Number(data.categoryId),
       };
-
-      console.log("PAYLOAD ENVIADO:", payload);
 
       const response = await apiRequest("POST", "/api/products", payload);
 
@@ -72,7 +73,7 @@ const ProductForm = () => {
       form.reset({
         name: "",
         price: 0,
-        categoryId: 0,
+        categoryId: 2,
         description: "",
         imageUrl: "",
       });
@@ -129,8 +130,10 @@ const ProductForm = () => {
                 <FormItem>
                   <FormLabel>Categoría</FormLabel>
                   <Select
-                    value={field.value ? String(field.value) : ""}
-                    onValueChange={(value) => field.onChange(Number(value))}
+                    value={String(field.value)}
+                    onValueChange={(value) =>
+                      field.onChange(Number(value))
+                    }
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -164,7 +167,9 @@ const ProductForm = () => {
                     <Input
                       type="number"
                       value={field.value}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      onChange={(e) =>
+                        field.onChange(Number(e.target.value))
+                      }
                     />
                   </FormControl>
                   <FormMessage />
@@ -177,12 +182,9 @@ const ProductForm = () => {
               name="imageUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>URL de la imagen (Cloudinary)</FormLabel>
+                  <FormLabel>URL de la imagen</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="https://res.cloudinary.com/..."
-                    />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -206,7 +208,6 @@ const ProductForm = () => {
             )}
           />
 
-          {/* Botón */}
           <div className="flex justify-end">
             <Button
               type="submit"
