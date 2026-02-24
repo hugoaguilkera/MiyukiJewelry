@@ -6,85 +6,111 @@ export default async function handler(
   res: VercelResponse
 ) {
   try {
-    const sql = neon(process.env.DATABASE_URL!);
+    if (!process.env.DATABASE_URL) {
+      return res.status(500).json({
+        error: "DATABASE_URL is not defined",
+      });
+    }
+
+    const sql = neon(process.env.DATABASE_URL);
 
     // =========================================================
     // GET → Obtener productos (con filtro opcional por categoría)
     // =========================================================
     if (req.method === "GET") {
+      try {
+        if (req.query.categoryId) {
+          const categoryId = Number(req.query.categoryId);
 
-      if (req.query.categoryId) {
+          if (Number.isNaN(categoryId)) {
+            return res.status(400).json({
+              error: "Invalid categoryId",
+            });
+          }
 
-        const categoryId = Number(req.query.categoryId);
+          const products = await sql`
+            SELECT id, name, price, image_url, category_id
+            FROM products
+            WHERE category_id = ${categoryId}
+            ORDER BY id DESC
+          `;
+
+          return res.status(200).json({
+            success: true,
+            result: products,
+          });
+        }
 
         const products = await sql`
           SELECT id, name, price, image_url, category_id
           FROM products
-          WHERE category_id = ${categoryId}
           ORDER BY id DESC
         `;
 
         return res.status(200).json({
           success: true,
-          result: products
+          result: products,
+        });
+      } catch (error: any) {
+        console.error("GET ERROR:", error);
+        return res.status(500).json({
+          error: error.message,
         });
       }
-
-      const products = await sql`
-        SELECT id, name, price, image_url, category_id
-        FROM products
-        ORDER BY id DESC
-      `;
-
-      return res.status(200).json({
-        success: true,
-        result: products
-      });
     }
 
     // =========================================================
-    // POST → Crear producto (CORREGIDO)
+    // POST → Crear producto
     // =========================================================
     if (req.method === "POST") {
+      try {
+        const { name, price, imageUrl, categoryId } = req.body;
 
-      const { name, price, imageUrl, categoryId } = req.body;
+        // 🔥 Validación fuerte y correcta
+        if (
+          typeof name !== "string" ||
+          name.trim() === "" ||
+          typeof price !== "number" ||
+          Number.isNaN(price) ||
+          typeof categoryId !== "number" ||
+          Number.isNaN(categoryId)
+        ) {
+          return res.status(400).json({
+            error: "Invalid data types",
+          });
+        }
 
-      // 🔥 Validación estricta de tipos
-      if (
-        typeof name !== "string" ||
-        typeof price !== "number" ||
-        typeof categoryId !== "number"
-      ) {
-        return res.status(400).json({
-          error: "Invalid data types"
+        const newProduct = await sql`
+          INSERT INTO products (name, price, image_url, category_id)
+          VALUES (
+            ${name.trim()},
+            ${price},
+            ${imageUrl ?? null},
+            ${categoryId}
+          )
+          RETURNING id, name, price, image_url, category_id
+        `;
+
+        return res.status(201).json({
+          success: true,
+          result: newProduct[0],
+        });
+      } catch (error: any) {
+        console.error("POST ERROR:", error);
+        return res.status(500).json({
+          error: error.message,
         });
       }
-
-      const newProduct = await sql`
-        INSERT INTO products (name, price, image_url, category_id)
-        VALUES (
-          ${name},
-          ${price},
-          ${imageUrl ?? null},
-          ${categoryId}
-        )
-        RETURNING *
-      `;
-
-      return res.status(201).json({
-        success: true,
-        result: newProduct[0]
-      });
     }
 
     return res.status(405).json({
-      error: "Method not allowed"
+      error: "Method not allowed",
     });
 
   } catch (error: any) {
     console.error("SERVER ERROR:", error);
     return res.status(500).json({
-      error: error.message
+      error: error.message,
     });
   }
 }
