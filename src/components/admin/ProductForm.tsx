@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import { productFormSchema } from "@shared/schema";
+import { insertProductSchema } from "@shared/schema";
 import { z } from "zod";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -25,23 +25,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-type FormData = z.infer<typeof productFormSchema>;
+type FormData = z.infer<typeof insertProductSchema>;
 
 const ProductForm = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // 🔥 CARGAR CATEGORÍAS DINÁMICAMENTE
+  // 🔥 Cargar categorías reales desde Neon
   const { data: categories = [], isLoading } = useQuery({
-    queryKey: ["/api/categories"],
+    queryKey: ["categories"],
     queryFn: async () => {
       const res = await fetch("/api/categories");
+      if (!res.ok) throw new Error("Error loading categories");
       return res.json();
     },
   });
 
   const form = useForm<FormData>({
-    resolver: zodResolver(productFormSchema),
+    resolver: zodResolver(insertProductSchema),
     defaultValues: {
       name: "",
       price: 0,
@@ -61,7 +62,7 @@ const ProductForm = () => {
         categoryId: Number(data.categoryId),
       };
 
-      console.log("SE ENVIA categoryId:", payload.categoryId);
+      console.log("CATEGORY ENVIADA:", payload.categoryId);
 
       const response = await apiRequest("POST", "/api/products", payload);
 
@@ -91,6 +92,14 @@ const ProductForm = () => {
         queryKey: ["/api/products"],
       });
     },
+
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
   });
 
   const onSubmit = (data: FormData) => {
@@ -106,6 +115,7 @@ const ProductForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 
+          {/* Nombre */}
           <FormField
             control={form.control}
             name="name"
@@ -120,6 +130,7 @@ const ProductForm = () => {
             )}
           />
 
+          {/* Categoría dinámica */}
           <FormField
             control={form.control}
             name="categoryId"
@@ -155,6 +166,7 @@ const ProductForm = () => {
             )}
           />
 
+          {/* Precio */}
           <FormField
             control={form.control}
             name="price"
@@ -175,6 +187,7 @@ const ProductForm = () => {
             )}
           />
 
+          {/* Imagen */}
           <FormField
             control={form.control}
             name="imageUrl"
@@ -189,6 +202,7 @@ const ProductForm = () => {
             )}
           />
 
+          {/* Descripción */}
           <FormField
             control={form.control}
             name="description"
@@ -203,6 +217,7 @@ const ProductForm = () => {
             )}
           />
 
+          {/* Botón */}
           <div className="flex justify-end">
             <Button type="submit" disabled={addProductMutation.isPending}>
               {addProductMutation.isPending && (
