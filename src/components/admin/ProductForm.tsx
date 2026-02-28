@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { productFormSchema } from "@shared/schema";
 import { z } from "zod";
 import { apiRequest } from "@/lib/queryClient";
@@ -31,12 +31,21 @@ const ProductForm = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  // 🔥 CARGAR CATEGORÍAS DINÁMICAMENTE
+  const { data: categories = [], isLoading } = useQuery({
+    queryKey: ["/api/categories"],
+    queryFn: async () => {
+      const res = await fetch("/api/categories");
+      return res.json();
+    },
+  });
+
   const form = useForm<FormData>({
     resolver: zodResolver(productFormSchema),
     defaultValues: {
       name: "",
       price: 0,
-      categoryId: 2, // valor inicial coherente
+      categoryId: undefined as unknown as number,
       description: "",
       imageUrl: "",
     },
@@ -44,8 +53,6 @@ const ProductForm = () => {
 
   const addProductMutation = useMutation({
     mutationFn: async (data: FormData) => {
-      console.log("CATEGORY ENVIADA AL BACKEND:", data.categoryId);
-
       const payload = {
         name: data.name.trim(),
         price: Number(data.price),
@@ -53,6 +60,8 @@ const ProductForm = () => {
         imageUrl: data.imageUrl?.trim() || null,
         categoryId: Number(data.categoryId),
       };
+
+      console.log("SE ENVIA categoryId:", payload.categoryId);
 
       const response = await apiRequest("POST", "/api/products", payload);
 
@@ -73,22 +82,13 @@ const ProductForm = () => {
       form.reset({
         name: "",
         price: 0,
-        categoryId: 1,
+        categoryId: undefined as unknown as number,
         description: "",
         imageUrl: "",
       });
 
       queryClient.invalidateQueries({
         queryKey: ["/api/products"],
-      });
-    },
-
-    onError: (error: any) => {
-      console.error(error);
-      toast({
-        title: "Error",
-        description: error.message || "Falló el guardado.",
-        variant: "destructive",
       });
     },
   });
@@ -106,92 +106,88 @@ const ProductForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nombre del producto</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nombre del producto</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="categoryId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Categoría</FormLabel>
+                <FormControl>
+                  <Select
+                    value={field.value ? String(field.value) : ""}
+                    onValueChange={(value) =>
+                      field.onChange(Number(value))
+                    }
+                    disabled={isLoading}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Seleccionar categoría" />
+                    </SelectTrigger>
 
-            <FormField
-              control={form.control}
-              name="categoryId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Categoría</FormLabel>
-                  <FormControl>
-                    <Select
-                      value={String(field.value)}
-                      onValueChange={(value) => {
-                        const numericValue = parseInt(value, 10);
-                        console.log("VALOR SELECCIONADO:", numericValue);
-                        field.onChange(numericValue);
-                      }}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccione una categoría" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="1">Collares</SelectItem>
-                        <SelectItem value="2">Pulseras</SelectItem>
-                        <SelectItem value="3">Aretes</SelectItem>
-                        <SelectItem value="4">Anillos</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <SelectContent>
+                      {categories.map((cat: any) => (
+                        <SelectItem
+                          key={cat.id}
+                          value={String(cat.id)}
+                        >
+                          {cat.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          </div>
+          <FormField
+            control={form.control}
+            name="price"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Precio ($)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    value={field.value}
+                    onChange={(e) =>
+                      field.onChange(Number(e.target.value))
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Precio ($)</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      value={field.value}
-                      onChange={(e) =>
-                        field.onChange(Number(e.target.value))
-                      }
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="imageUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>URL de la imagen</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-          </div>
+          <FormField
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>URL de la imagen</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}
@@ -208,10 +204,7 @@ const ProductForm = () => {
           />
 
           <div className="flex justify-end">
-            <Button
-              type="submit"
-              disabled={addProductMutation.isPending}
-            >
+            <Button type="submit" disabled={addProductMutation.isPending}>
               {addProductMutation.isPending && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
