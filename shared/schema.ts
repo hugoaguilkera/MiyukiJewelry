@@ -57,7 +57,6 @@ export const products = pgTable("products", {
 
   imageUrl: text("image_url"),
 
-  // 🔥 Aseguramos que SIEMPRE sea número entero válido
   categoryId: integer("category_id").notNull(),
 
   rating: real("rating").default(0),
@@ -68,7 +67,7 @@ export const products = pgTable("products", {
 });
 
 /* -----------------------------------------------------
-   INSERT PRODUCT SCHEMA CORREGIDO
+   INSERT PRODUCT SCHEMA ENTERPRISE
 ----------------------------------------------------- */
 
 export const insertProductSchema = createInsertSchema(products)
@@ -79,7 +78,13 @@ export const insertProductSchema = createInsertSchema(products)
     reviewCount: true,
   })
   .extend({
-    // 🔥 Forzamos que categoryId sea número real
+    name: z
+      .string({
+        required_error: "El nombre es obligatorio",
+      })
+      .trim()
+      .min(2, "El nombre debe tener al menos 2 caracteres"),
+
     categoryId: z.number({
       required_error: "La categoría es obligatoria",
       invalid_type_error: "La categoría debe ser número",
@@ -149,4 +154,3 @@ export type InsertTestimonial = z.infer<typeof insertTestimonialSchema>;
 
 export type ContactMessage = typeof contactMessages.$inferSelect;
 export type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;
-
