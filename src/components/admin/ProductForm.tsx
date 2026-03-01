@@ -6,6 +6,7 @@ import { z } from "zod";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+
 import {
   Form,
   FormControl,
@@ -14,9 +15,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+
 import {
   Select,
   SelectContent,
@@ -31,7 +34,7 @@ const ProductForm = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // 🔥 Cargar categorías reales desde Neon
+  // 🔥 Cargar categorías reales
   const { data: categories = [], isLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
@@ -46,7 +49,7 @@ const ProductForm = () => {
     defaultValues: {
       name: "",
       price: 0,
-      categoryId: undefined as unknown as number,
+      categoryId: 0,   // 🔥 clave
       description: "",
       imageUrl: "",
     },
@@ -83,7 +86,7 @@ const ProductForm = () => {
       form.reset({
         name: "",
         price: 0,
-        categoryId: undefined as unknown as number,
+        categoryId: 0,  // 🔥 clave
         description: "",
         imageUrl: "",
       });
@@ -103,6 +106,11 @@ const ProductForm = () => {
   });
 
   const onSubmit = (data: FormData) => {
+    if (!data.categoryId || data.categoryId === 0) {
+      alert("Debe seleccionar una categoría");
+      return;
+    }
+
     addProductMutation.mutate(data);
   };
 
@@ -130,7 +138,7 @@ const ProductForm = () => {
             )}
           />
 
-          {/* Categoría dinámica */}
+          {/* Categoría */}
           <FormField
             control={form.control}
             name="categoryId"
@@ -139,7 +147,7 @@ const ProductForm = () => {
                 <FormLabel>Categoría</FormLabel>
                 <FormControl>
                   <Select
-                    value={field.value ? String(field.value) : ""}
+                    value={field.value > 0 ? String(field.value) : ""}
                     onValueChange={(value) =>
                       field.onChange(Number(value))
                     }
@@ -176,7 +184,7 @@ const ProductForm = () => {
                 <FormControl>
                   <Input
                     type="number"
-                    value={field.value}
+                    value={field.value ?? ""}
                     onChange={(e) =>
                       field.onChange(Number(e.target.value))
                     }
